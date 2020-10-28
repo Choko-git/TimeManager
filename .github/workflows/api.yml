@@ -1,0 +1,31 @@
+name: CI
+
+on: push
+
+jobs:
+  test:
+    defaults:
+      run:
+        working-directory: ./apiTimeManager
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: apitimemanager_test_db
+        ports:
+        - 5432:5432
+    env:
+      MIX_ENV: test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1.0.0
+        with:
+          otp-version: 22.2.6
+          elixir-version: 1.10.1      
+      - run: mix local.rebar --force
+      - run: mix local.hex --force
+      - run: mix deps.get
+      - run: mix test
