@@ -40,4 +40,9 @@ defmodule BackendWeb.UserController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def get_users_params(conn, params) do
+    users = Users.get_users_by_params!(params)
+    render(conn, "index.json", users: users)
+  end
 end

@@ -40,4 +40,15 @@ defmodule BackendWeb.WorkingtimeController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def get_all(conn, params) do
+    working_times = WorkingTimes.get_working_time_all(params)
+    render(conn, "index.json", working_times: working_times)
+  end
+
+  def get_one(conn,params) do
+    working_time = WorkingTimes.get_working_time_one(params)
+    render(conn, "show.json", working_time: working_time)
+  end
+
 end

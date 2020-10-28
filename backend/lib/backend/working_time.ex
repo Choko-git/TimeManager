@@ -101,4 +101,37 @@ defmodule Backend.WorkingTime do
   def change_workingtime(%Workingtime{} = workingtime, attrs \\ %{}) do
     Workingtime.changeset(workingtime, attrs)
   end
+
+  # Récupère 1 WorkingTime
+  def get_working_time_one(params) do
+    from(workingtime in WorkingTime,
+      where:
+        workingtime.userID == ^params["userID"] and workingtime.id == ^params["workingtimeID"]
+    )
+    |> Repo.one()
+  end
+
+  # Récupère tous les WorkingTime
+  def get_working_time_all(params) do
+    where = [userID: params["userID"]]
+
+    startDate =
+      if params["start"] do
+        dynamic([workingtime], workingtime.start >= ^params["start"])
+      else
+        true
+      end
+    endDate =
+      if params["end"] do
+        dynamic([workingtime], workingtime.end <= ^params["end"])
+      else
+        true
+      end
+    WorkingTime
+    |> where(^where)
+    |> where(^startDate)
+    |> where(^endDate)
+    |> Repo.all()
+  end
+
 end

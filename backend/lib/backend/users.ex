@@ -4,6 +4,7 @@ defmodule Backend.Users do
   """
 
   import Ecto.Query, warn: false
+
   alias Backend.Repo
 
   alias Backend.Users.User
@@ -101,4 +102,10 @@ defmodule Backend.Users do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+  def get_users_by_params!(params) do
+    from(user in User, where: users.supervisor_id == ^params["supervisor_id"] or users.role_id == ^params["role_id"])
+    |>Repo.all()
+  end
+
 end

@@ -40,4 +40,10 @@ defmodule BackendWeb.VacationController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def get_all_vacations(conn, params) do
+    vacation = Vacations.get_all_vacations(params)
+    render(conn, "index.json", vacation: vacation)
+  end
+
 end

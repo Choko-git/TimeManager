@@ -33,8 +33,8 @@ defmodule BackendWeb.RoleController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    role = Roles.get_role!(id)
+  def delete(conn, %{"role_name" => role_name}) do
+    role = Roles.get_role!(role_name)
 
     with {:ok, %Role{}} <- Roles.delete_role(role) do
       send_resp(conn, :no_content, "")

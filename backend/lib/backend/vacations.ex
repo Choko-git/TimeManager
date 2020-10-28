@@ -101,4 +101,11 @@ defmodule Backend.Vacations do
   def change_vacation(%Vacation{} = vacation, attrs \\ %{}) do
     Vacation.changeset(vacation, attrs)
   end
+
+    # Récupère tous les vacations de l'utilisateur
+    def get_all_vacations(params) do
+      from(vacations in Vacation, where: vacations.user_id == ^params["userID"])
+      |> Repo.all()
+    end
+
 end
