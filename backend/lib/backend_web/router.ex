@@ -20,7 +20,7 @@ defmodule BackendWeb.Router do
     put "/workingtimes/:id", WorkingtimeController, :update
     post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
-    get "/workingtimes/:user_id", WorkingtimeController, :show
+    
     # Routes pour Clocks
     resources "/clocks", ClockController, except: [:index]
     post "/clocks/:userID", ClockController, :create
@@ -34,7 +34,6 @@ defmodule BackendWeb.Router do
     delete "/teams/:teamID", TeamController, :delete
     put "/teams", TeamController, :update
     get "/teams", TeamController, :get_all_teams
-
 
     # Routes pour Vacations
     resources "/vacations", VacationController, except: [:index]
