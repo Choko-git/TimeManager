@@ -49,6 +49,14 @@ defmodule Backend.Clocks do
       {:error, %Ecto.Changeset{}}
 
   """
+  def get_clocks(params) do
+    from(clocks in Clock,
+      where:
+        clocks.user_id == ^params["userID"]
+    )
+    |> Repo.all()
+  end
+
   def create_clock(attrs \\ %{}) do
     %Clock{}
     |> Clock.changeset(attrs)

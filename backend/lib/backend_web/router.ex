@@ -21,12 +21,14 @@ defmodule BackendWeb.Router do
     post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
     get "/workingtimes/:user_id", WorkingtimeController, :show
+
     # Routes pour Clocks
-    resources "/clocks", ClockController, except: [:index]
-    post "/clocks/:userID", ClockController, :create
-    get "/clocks/:userID", ClockController, :index
-    put "/clocks/:userID", ClockController, :update
-    get "/clocks/:userID/clockID", ClockController, :get_one
+    get "/clocks/:userID", ClockController, :show
+    post "/clocks", ClockController, :create
+    get "/clocks/:userID", ClockController, :get_all
+    put "/clocks/:id", ClockController, :update
+    get "/clocks/:userID/:clockID", ClockController, :get_one
+    delete "/clocks/:id", ClockController, :delete
 
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show
