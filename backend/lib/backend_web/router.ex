@@ -19,8 +19,8 @@ defmodule BackendWeb.Router do
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
     put "/workingtimes/:id", WorkingtimeController, :update
     post "/workingtimes", WorkingtimeController, :create
-    delete "/workingtimes/:id",WorkingtimeController, :delete    
-    
+    delete "/workingtimes/:id",WorkingtimeController, :delete
+
     # Routes pour Clocks
     get "/clocks/:userID", ClockController, :show
     post "/clocks", ClockController, :create
@@ -41,7 +41,7 @@ defmodule BackendWeb.Router do
     get "/vacations/:userID", VacationController, :get_all_vacations
 
   end
-  
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
