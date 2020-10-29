@@ -13,10 +13,10 @@ config :backend,
 # Configures the endpoint
 config :backend, BackendWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "CL/kG4kJcx+zDrSPSz1GHhGUl4+M/qcYvICA/NiQfuLVFnPx6D1LpFY+fRboxObe",
+  secret_key_base: "POR0hDNssT5aCc5C4KrAop58i7AEMsh1bhCYerwZKm7XkHGnZ2tDh64qZqx44B0H",
   render_errors: [view: BackendWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Backend.PubSub,
-  live_view: [signing_salt: "BT0U4er/"]
+  live_view: [signing_salt: "ZDexRJhd"]
 
 # Configures Elixir's Logger
 config :logger, :console,

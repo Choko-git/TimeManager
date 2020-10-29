@@ -7,38 +7,34 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through :api
+
+    # Routes pour Users
+    resources "/users", UserController, except: [:index]
+    get "/users", UserController, :all_users_params # team ou role.
+
+    # Routes pour WorkingTime
+    get "/workingtimes/:userID", WorkingtimeController, :get_all
+    get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
+    put "/workingtimes/:id", WorkingtimeController, :update
+    post "/workingtimes/:userID", WorkingtimeController, :create
+    delete "/workingtimes/:id",WorkingtimeController, :delete
+
+    # Routes pour Clocks
+    resources "/clocks", ClockController, except: [:index]
+    post "/clocks/:userID", ClockController, :create
+    get "/clocks/:userID", ClockController, :index
+
+    # Routes pour Teams
+    get "/teams/:teamID", TeamController, :show
+    post "/teams/:team_name", TeamController, :create
+    delete "/teams/:team_name", TeamController, :delete
+    #update "/teams/:teamID", TeamController, :update
+
+    # Routes pour Vacations
+    resources "/vacations", VacationController, except: [:index]
+    get "/vacations/:userID", VacationController, :get_all_vacations
+
   end
-
-  # Routes pour Role
-  get "/roles/:roleID", RoleController, :show
-  post "/roles/:role_name", RoleController, :create
-  delete "/roles/:role_name", RoleController, :delete
-
-  # Routes pour Users
-  resources "/users", UserController, except: [:index]
-  get "/users", UserController, :all_users_params # team ou role.
-
-  # Routes pour WorkingTime
-  get "/workingtimes/:userID", WorkingTimeController, :get_all
-  get "/workingtimes/:userID/:workingtimeID", WorkingTimeController, :get_one
-  put "/workingtimes/:id", WorkingTimeController, :update
-  post "/workingtimes/:userID", WorkingTimeController, :create
-  delete "/workingtimes/:id",WorkingTimeController, :delete
-
-  # Routes pour Clocks
-  resources "/clocks", ClockController, except: [:index]
-  post "/clocks/:userID", ClockController, :create
-  get "/clocks/:userID", ClockController, :index
-
-  # Routes pour Teams
-  get "/teams/:teamID", TeamController, :show
-  post "/teams/:team_name", TeamController, :create
-  delete "/teams/:team_name", TeamController, :delete
-  #update "/teams/:teamID", TeamController, :update
-
-  # Routes pour Vacations
-  resources "/vacations", VacationController, except: [:index]
-  get "/vacations/:userID", VacationController, :get_all_vacations
 
   # Enables LiveDashboard only for development
   #

@@ -9,15 +9,15 @@ defmodule Backend.WorkingTime do
   alias Backend.WorkingTime.Workingtime
 
   @doc """
-  Returns the list of workingtime.
+  Returns the list of workingtimes.
 
   ## Examples
 
-      iex> list_workingtime()
+      iex> list_workingtimes()
       [%Workingtime{}, ...]
 
   """
-  def list_workingtime do
+  def list_workingtimes do
     Repo.all(Workingtime)
   end
 

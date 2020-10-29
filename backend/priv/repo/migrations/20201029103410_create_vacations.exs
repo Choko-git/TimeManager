@@ -7,7 +7,7 @@ defmodule Backend.Repo.Migrations.CreateVacations do
       add :end, :naive_datetime
       add :accepted, :boolean, default: false, null: false
       add :seen, :boolean, default: false, null: false
-      add :user_id, references(:users, on_delete: :nothing)
+
       timestamps()
     end
 

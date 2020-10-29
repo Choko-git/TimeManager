@@ -1,0 +1,41 @@
+# Version of docker-compose
+version: '3'
+
+# Containers
+services:
+  # Our Phoenix container
+  phoenix:
+    # The build parameters for this container.
+    build:
+      context: ./apiTimeManager
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres@db5432/apitimemanager_dev
+    ports:
+      - "4000:4000"
+    command: './entrypoint.sh'
+    depends_on:
+      - db
+
+  # db container
+  db:
+    image: postgres:9.6
+    environment:
+      # utilisateur postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      # données stockés par postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # vuejs container
+  vuejs:
+    build:
+      context: ./webTimeManager
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+volumes:
+  pgdata:

@@ -7,8 +7,8 @@ defmodule BackendWeb.WorkingtimeController do
   action_fallback BackendWeb.FallbackController
 
   def index(conn, _params) do
-    workingtime = WorkingTime.list_workingtime()
-    render(conn, "index.json", workingtime: workingtime)
+    workingtimes = WorkingTime.list_workingtimes()
+    render(conn, "index.json", workingtimes: workingtimes)
   end
 
   def create(conn, %{"workingtime" => workingtime_params}) do
@@ -47,8 +47,7 @@ defmodule BackendWeb.WorkingtimeController do
   end
 
   def get_one(conn,params) do
-    working_time = WorkingTimes.get_working_time_one(params)
-    render(conn, "show.json", working_time: working_time)
+      working_time = WorkingTimes.get_working_time_one(params)
+      render(conn, "show.json", working_time: working_time)
   end
-
 end

@@ -14,7 +14,6 @@ defmodule Backend.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
-    create index(:users, [:role_id])
     create index(:users, [:surpervisor_id])
   end
 end

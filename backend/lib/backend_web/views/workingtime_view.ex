@@ -2,8 +2,8 @@ defmodule BackendWeb.WorkingtimeView do
   use BackendWeb, :view
   alias BackendWeb.WorkingtimeView
 
-  def render("index.json", %{workingtime: workingtime}) do
-    %{data: render_many(workingtime, WorkingtimeView, "workingtime.json")}
+  def render("index.json", %{workingtimes: workingtimes}) do
+    %{data: render_many(workingtimes, WorkingtimeView, "workingtime.json")}
   end
 
   def render("show.json", %{workingtime: workingtime}) do
