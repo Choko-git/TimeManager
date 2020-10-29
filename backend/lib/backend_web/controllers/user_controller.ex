@@ -12,6 +12,9 @@ defmodule BackendWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    hash = Bcrypt.add_hash(user_params["password"])
+    user_params = Map.replace!(user_params, "password", hash[:password_hash])
+
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -20,8 +23,39 @@ defmodule BackendWeb.UserController do
     end
   end
 
+  def signUp(conn, user_params) do
+    hash = Bcrypt.add_hash(user_params["password"])
+    newUser = %{username: user_params["username"], password: hash[:password_hash]}
+
+    with {:ok, %User{} = user} <- Accounts.create_user(newUser) do
+      conn
+      |> put_status(:created)
+      |> text("Account created")
+    end
+  end
+
+  def log_in(conn, user_params) do
+    user = Users.get_by_email(user_params)
+    res = Bcrypt.check_pass(user, user_params["password"], hash_key: :password, hide_user: true)
+    check = elem(res, 0)
+    if to_string(check) == "error" do
+      conn
+      |> put_status(:bad_request)
+      |> text("Username or password incorrect")
+    else
+      date =
+        DateTime.utc_now()
+        |> Date.add(30)
+      extra_claims = %{"user_id" => user.id, "role" => user.role, "expiresAt" => date}
+      token = BootstrapAuthentication.Token.generate_and_sign!(extra_claims)
+      render(conn, "sign.json", %{token: token, user: user})
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     user = Users.get_user!(id)
+    IO.inspect conn
+
     render(conn, "show.json", user: user)
   end
 
@@ -45,5 +79,4 @@ defmodule BackendWeb.UserController do
     users = Users.get_users_by_params!(params)
     render(conn, "index.json", users: users)
   end
-
 end

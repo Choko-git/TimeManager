@@ -4,8 +4,12 @@
       <SideMenu />
     </div>
     <div id="right">
-      <Header />
-      <Template />
+      <div id="top">
+        <Header />
+      </div>
+      <div id="bottom">
+        <Template />
+      </div>
     </div>
   </div>
 </template>
@@ -16,24 +20,36 @@ import Header from "./components/main/Header";
 import SideMenu from "./components/main/SideMenu";
 import Template from "./components/main/Template";
 export default {
-  components : {
+  components: {
     Header,
     SideMenu,
-    Template
-  }
+    Template,
+  },
 };
 </script>
 
 <style lang="scss">
-  #content {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    & #left {
-      width: 20%;
+#content {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  & #left {
+        @include sidemenu-format
+  }
+  & #right {
+    height: 100%;
+    width: 100%;
+    & #top {
+      width: 100%;
+        @include header-format
     }
-    & #right {
-      width: 80%;
+    & #bottom {
+        @include template-format;
+        & #template {
+          height: 100%;
+          display: flex;
+        }
     }
   }
+}
 </style>

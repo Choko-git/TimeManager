@@ -103,8 +103,17 @@ defmodule Backend.Users do
   end
 
   def get_users_by_params!(params) do
-    from(users in User, where: users.supervisor_id == ^params["supervisor_id"] or users.role_id == ^params["role_id"])
-    |>Repo.all()
+    from(users in User,
+      where:
+        users.supervisor_id == ^params["supervisor_id"] or users.role_id == ^params["role_id"]
+    )
+    |> Repo.all()
   end
 
+  def get_by_email(user) do
+    from(u in User,
+      where: u.email == ^user["email"],
+    )
+    |> Repo.one()
+  end
 end
