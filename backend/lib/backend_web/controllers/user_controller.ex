@@ -11,7 +11,7 @@ defmodule BackendWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def create(conn, user_params) do
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -35,7 +35,6 @@ defmodule BackendWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     user = Users.get_user!(id)
-
     with {:ok, %User{}} <- Users.delete_user(user) do
       send_resp(conn, :no_content, "")
     end

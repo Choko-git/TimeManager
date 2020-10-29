@@ -20,24 +20,29 @@ defmodule BackendWeb.TeamController do
     end
   end
 
-  def show(conn, id) do
-    team = Teams.get_team(id)
+  def show(conn, %{"teamID" => id}) do
+    team = Teams.get_team!(id)
     render(conn, "show.json", team: team)
   end
 
-  def update(conn, %{"id" => id, "team" => team_params}) do
-    team = Teams.get_team!(id)
-
+  def update(conn, team_params) do
+    team = Teams.get_team!(team_params["id"])
     with {:ok, %Team{} = team} <- Teams.update_team(team, team_params) do
       render(conn, "show.json", team: team)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"teamID" => id}) do
     team = Teams.get_team!(id)
 
     with {:ok, %Team{}} <- Teams.delete_team(team) do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def get_all_teams(conn,params) do
+    teams = Teams.list_teams()
+    render(conn, "index.json", teams: teams)
+  end
+
 end
