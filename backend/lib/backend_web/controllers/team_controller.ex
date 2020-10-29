@@ -20,8 +20,8 @@ defmodule BackendWeb.TeamController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    team = Teams.get_team!(id)
+  def show(conn, id) do
+    team = Teams.get_team(id)
     render(conn, "show.json", team: team)
   end
 
