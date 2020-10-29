@@ -26,7 +26,7 @@ defmodule BackendWeb.Router do
 
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show
-    post "/teams/:team_name", TeamController, :create
+    post "/teams", TeamController, :create
     delete "/teams/:team_name", TeamController, :delete
     #update "/teams/:teamID", TeamController, :update
 
