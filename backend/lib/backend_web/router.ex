@@ -16,9 +16,9 @@ defmodule BackendWeb.Router do
     get "/workingtimes/:userID", WorkingtimeController, :get_all
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
     put "/workingtimes/:id", WorkingtimeController, :update
-    post "/workingtimes/:userID", WorkingtimeController, :create
+    post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
-
+    get "/workingtimes/:user_id", WorkingtimeController, :show
     # Routes pour Clocks
     resources "/clocks", ClockController, except: [:index]
     post "/clocks/:userID", ClockController, :create

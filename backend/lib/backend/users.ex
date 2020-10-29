@@ -103,7 +103,6 @@ defmodule Backend.Users do
   end
 
   def get_users_by_params!(params) do
-
     roleCheck =
       if params["role"] do
         dynamic([user], user.role == ^params["role"])
