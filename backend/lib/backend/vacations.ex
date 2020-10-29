@@ -107,4 +107,14 @@ defmodule Backend.Vacations do
     from(vacations in Vacation, where: vacations.user_id == ^params["userID"])
     |> Repo.all()
   end
+
+  def get_one_vacation(params) do
+    from(vacations in Vacation,
+      where:
+        vacations.user_id == ^params["userID"] and vacations.id == ^params["vacationID"]
+    )
+    |> Repo.one()
+  end
+
+
 end

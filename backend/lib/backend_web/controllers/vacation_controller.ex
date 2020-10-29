@@ -11,7 +11,7 @@ defmodule BackendWeb.VacationController do
     render(conn, "index.json", vacations: vacations)
   end
 
-  def create(conn, %{"vacation" => vacation_params}) do
+  def create(conn, vacation_params) do
     with {:ok, %Vacation{} = vacation} <- Vacations.create_vacation(vacation_params) do
       conn
       |> put_status(:created)
@@ -20,14 +20,13 @@ defmodule BackendWeb.VacationController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, id) do
     vacation = Vacations.get_vacation!(id)
     render(conn, "show.json", vacation: vacation)
   end
 
-  def update(conn, %{"id" => id, "vacation" => vacation_params}) do
-    vacation = Vacations.get_vacation!(id)
-
+  def update(conn, vacation_params) do
+    vacation = Vacations.get_vacation!(vacation_params["id"])
     with {:ok, %Vacation{} = vacation} <- Vacations.update_vacation(vacation, vacation_params) do
       render(conn, "show.json", vacation: vacation)
     end
@@ -42,8 +41,12 @@ defmodule BackendWeb.VacationController do
   end
 
   def get_all_vacations(conn, params) do
-    vacation = Vacations.get_all_vacations(params)
-    render(conn, "index.json", vacation: vacation)
+    vacations = Vacations.get_all_vacations(params)
+    render(conn, "index.json", vacations: vacations)
   end
 
+  def get_vacation(conn,params) do
+    vacation = Vacations.get_one_vacation(params)
+    render(conn, "show.json", vacation: vacation)
+  end
 end
