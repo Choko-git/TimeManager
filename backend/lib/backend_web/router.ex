@@ -34,7 +34,7 @@ defmodule BackendWeb.Router do
   get "/teams/:teamID", TeamController, :show
   post "/teams/:team_name", TeamController, :create
   delete "/teams/:team_name", TeamController, :delete
-  update "/teams/:teamID", TeamController, :update
+  #update "/teams/:teamID", TeamController, :update
 
   # Routes pour Vacations
   resources "/vacations", VacationController, except: [:index]
