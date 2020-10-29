@@ -36,12 +36,12 @@ defmodule BackendWeb.Router do
     put "/teams", TeamController, :update
     get "/teams", TeamController, :get_all_teams
 
-
     # Routes pour Vacations
     resources "/vacations", VacationController, except: [:index]
     get "/vacations/:userID", VacationController, :get_all_vacations
 
   end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
