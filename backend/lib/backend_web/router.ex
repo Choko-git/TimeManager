@@ -10,7 +10,7 @@ defmodule BackendWeb.Router do
 
     # Routes pour Users
     resources "/users", UserController, except: [:index]
-    get "/users", UserController, :all_users_params # team ou role.
+    get "/users", UserController, :all_users_params
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingtimeController, :get_all
@@ -26,7 +26,7 @@ defmodule BackendWeb.Router do
 
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show
-    post "/teams/:team_name", TeamController, :create
+    post "/teams", TeamController, :create
     delete "/teams/:team_name", TeamController, :delete
     #update "/teams/:teamID", TeamController, :update
 
