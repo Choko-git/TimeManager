@@ -35,9 +35,9 @@ defmodule Backend.Teams do
       ** (Ecto.NoResultsError)
 
   """
-  def get_team(id)
+  def get_team!(id)
    do
-    Repo.get(Team, id)
+    Repo.get!(Team, id)
    end
   @doc """
   Creates a team.

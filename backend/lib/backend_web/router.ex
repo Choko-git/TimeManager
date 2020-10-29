@@ -10,15 +10,19 @@ defmodule BackendWeb.Router do
 
     # Routes pour Users
     resources "/users", UserController, except: [:index]
+<<<<<<< HEAD
     get "/users", UserController, :all_users_params
+=======
+    get "/users", UserController, :get_users_params # team ou role.
+>>>>>>> thomas
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingtimeController, :get_all
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
     put "/workingtimes/:id", WorkingtimeController, :update
-    post "/workingtimes/:userID", WorkingtimeController, :create
+    post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
-
+    get "/workingtimes/:user_id", WorkingtimeController, :show
     # Routes pour Clocks
     resources "/clocks", ClockController, except: [:index]
     post "/clocks/:userID", ClockController, :create
@@ -27,8 +31,14 @@ defmodule BackendWeb.Router do
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show
     post "/teams", TeamController, :create
+<<<<<<< HEAD
     delete "/teams/:team_name", TeamController, :delete
     #update "/teams/:teamID", TeamController, :update
+=======
+    delete "/teams/:teamID", TeamController, :delete
+    put "/teams", TeamController, :update
+    get "/teams", TeamController, :get_all_teams
+>>>>>>> thomas
 
     # Routes pour Vacations
     resources "/vacations", VacationController, except: [:index]
