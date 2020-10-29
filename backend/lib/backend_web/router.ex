@@ -37,9 +37,12 @@ defmodule BackendWeb.Router do
     get "/teams", TeamController, :get_all_teams
 
     # Routes pour Vacations
-    resources "/vacations", VacationController, except: [:index]
+    get "/vacations/:userID", VacationController, :show
     get "/vacations/:userID", VacationController, :get_all_vacations
-
+    get "/vacations/:userID/:vacationID", VacationController, :get_vacation
+    post "/vacations", VacationController, :create
+    delete "/vacations/:id", VacationController, :delete
+    put "/vacations/:id", VacationController, :update
   end
 
   # Enables LiveDashboard only for development
