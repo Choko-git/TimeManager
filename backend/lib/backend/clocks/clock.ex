@@ -16,7 +16,8 @@ defmodule Backend.Clocks.Clock do
   def changeset(clock, attrs) do
     clock
     |> cast(attrs, [:status, :total_time, :start, :end, :user_id])
-    |> validate_required([:status, :start])
+    |> validate_required([:status, :total_time, :start, :end])
+
   end
 
 end

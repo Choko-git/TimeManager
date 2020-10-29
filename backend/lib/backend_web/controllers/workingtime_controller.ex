@@ -11,7 +11,7 @@ defmodule BackendWeb.WorkingtimeController do
     render(conn, "index.json", workingtimes: workingtimes)
   end
 
-  def create(conn, %{"workingtime" => workingtime_params}) do
+  def create(conn, workingtime_params) do
     with {:ok, %Workingtime{} = workingtime} <- WorkingTime.create_workingtime(workingtime_params) do
       conn
       |> put_status(:created)
@@ -20,7 +20,7 @@ defmodule BackendWeb.WorkingtimeController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, id) do
     workingtime = WorkingTime.get_workingtime!(id)
     render(conn, "show.json", workingtime: workingtime)
   end
