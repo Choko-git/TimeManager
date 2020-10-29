@@ -11,6 +11,7 @@ defmodule BackendWeb.Router do
     # Routes pour Users
     resources "/users", UserController, except: [:index]
     get "/users", UserController, :all_users_params
+    put "/users/userID", UserController, :update
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingtimeController, :get_all
@@ -23,6 +24,8 @@ defmodule BackendWeb.Router do
     resources "/clocks", ClockController, except: [:index]
     post "/clocks/:userID", ClockController, :create
     get "/clocks/:userID", ClockController, :index
+    put "/clocks/:userID", ClockController, :update
+    get "/clocks/:userID/clockID", ClockController, :get_one
 
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show

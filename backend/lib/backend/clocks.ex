@@ -101,4 +101,12 @@ defmodule Backend.Clocks do
   def change_clock(%Clock{} = clock, attrs \\ %{}) do
     Clock.changeset(clock, attrs)
   end
+
+  def get_clock_one(params) do
+    from(clocks in Clock,
+      where:
+        clocks.user_id == ^params["userID"] and clocks.id == ^params["clockID"]
+    )
+    |> Repo.one()
+  end
 end
