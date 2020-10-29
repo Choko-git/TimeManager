@@ -7,9 +7,8 @@ defmodule Backend.Repo.Migrations.CreateUsers do
       add :email, :string
       add :password, :string
       add :right_active, :boolean, default: false, null: false
-      add :role_id, references(:roles, on_delete: :nothing)
-      add :surpervisor_id, references(:users, on_delete: :delete_all)
-      add :role, enum
+      add :role, :string
+      add :surpervisor_id, references(:users, on_delete: :nothing)
 
       timestamps()
     end
