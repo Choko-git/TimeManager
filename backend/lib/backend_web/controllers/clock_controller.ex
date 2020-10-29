@@ -7,8 +7,8 @@ defmodule BackendWeb.ClockController do
   action_fallback BackendWeb.FallbackController
 
   def index(conn, _params) do
-    clocks = Clocks.list_clocks()
-    render(conn, "index.json", clocks: clocks)
+    clock = Clocks.list_clocks()
+    render(conn, "index.json", clock: clock)
   end
 
   def create(conn, clock_params) do
@@ -20,7 +20,7 @@ defmodule BackendWeb.ClockController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, id) do
     clock = Clocks.get_clock!(id)
     render(conn, "show.json", clock: clock)
   end
@@ -42,7 +42,12 @@ defmodule BackendWeb.ClockController do
   end
 
   def get_one(conn,params) do
-    clocks = Clock.get_clock_one(params)
-    render(conn, "show.json", clocks: clocks)
+    clock = Clocks.get_clock_one(params)
+    render(conn, "show.json", clock: clock)
+  end
+
+  def get_all(conn,params) do
+    clocks = Clocks.get_clocks(params)
+    render(conn, "index.json", clocks: clocks)
   end
 end
