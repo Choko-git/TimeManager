@@ -17,9 +17,7 @@ defmodule Backend.Clocks.Clock do
     clock
     |> cast(attrs, [:status, :total_time, :start, :end, :user_id])
     |> validate_required([:status, :total_time, :start, :end])
-=======
-    |> validate_required([:status, :start])
->>>>>>> Matthieu
+
   end
 
 end
