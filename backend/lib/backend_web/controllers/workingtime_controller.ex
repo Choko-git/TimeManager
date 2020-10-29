@@ -25,9 +25,8 @@ defmodule BackendWeb.WorkingtimeController do
     render(conn, "show.json", workingtime: workingtime)
   end
 
-  def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do
-    workingtime = WorkingTime.get_workingtime!(id)
-
+  def update(conn, workingtime_params) do
+    workingtime = WorkingTime.get_workingtime!(workingtime_params["id"])
     with {:ok, %Workingtime{} = workingtime} <- WorkingTime.update_workingtime(workingtime, workingtime_params) do
       render(conn, "show.json", workingtime: workingtime)
     end
