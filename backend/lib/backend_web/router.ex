@@ -13,11 +13,11 @@ defmodule BackendWeb.Router do
     get "/users", UserController, :all_users_params # team ou role.
 
     # Routes pour WorkingTime
-    get "/workingtimes/:userID", WorkingTimeController, :get_all
-    get "/workingtimes/:userID/:workingtimeID", WorkingTimeController, :get_one
-    put "/workingtimes/:id", WorkingTimeController, :update
-    post "/workingtimes/:userID", WorkingTimeController, :create
-    delete "/workingtimes/:id",WorkingTimeController, :delete
+    get "/workingtimes/:userID", WorkingtimeController, :get_all
+    get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
+    put "/workingtimes/:id", WorkingtimeController, :update
+    post "/workingtimes/:userID", WorkingtimeController, :create
+    delete "/workingtimes/:id",WorkingtimeController, :delete
 
     # Routes pour Clocks
     resources "/clocks", ClockController, except: [:index]
