@@ -20,7 +20,6 @@ defmodule BackendWeb.Router do
     put "/workingtimes/:id", WorkingtimeController, :update
     post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
-    get "/workingtimes/:user_id", WorkingtimeController, :show
 
     # Routes pour Clocks
     get "/clocks/:userID", ClockController, :show
