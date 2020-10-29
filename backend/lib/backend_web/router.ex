@@ -8,14 +8,9 @@ defmodule BackendWeb.Router do
   scope "/api", BackendWeb do
     pipe_through :api
 
-    # Routes pour Role
-    get "/roles/:roleID", RoleController, :show
-    post "/roles/:role", RoleController, :create
-    delete "/roles/:role_name", RoleController, :delete
-
     # Routes pour Users
     resources "/users", UserController, except: [:index]
-    get "/users/:supervisor_id", UserController, :all_users_params # team ou role.
+    get "/users", UserController, :all_users_params # team ou role.
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingTimeController, :get_all
@@ -33,14 +28,13 @@ defmodule BackendWeb.Router do
     get "/teams/:teamID", TeamController, :show
     post "/teams/:team_name", TeamController, :create
     delete "/teams/:team_name", TeamController, :delete
+    #update "/teams/:teamID", TeamController, :update
 
     # Routes pour Vacations
     resources "/vacations", VacationController, except: [:index]
     get "/vacations/:userID", VacationController, :get_all_vacations
 
   end
-
-
 
   # Enables LiveDashboard only for development
   #

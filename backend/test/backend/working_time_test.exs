@@ -3,7 +3,7 @@ defmodule Backend.WorkingTimeTest do
 
   alias Backend.WorkingTime
 
-  describe "workingtime" do
+  describe "workingtimes" do
     alias Backend.WorkingTime.Workingtime
 
     @valid_attrs %{end: ~N[2010-04-17 14:00:00], start: ~N[2010-04-17 14:00:00]}
@@ -19,9 +19,9 @@ defmodule Backend.WorkingTimeTest do
       workingtime
     end
 
-    test "list_workingtime/0 returns all workingtime" do
+    test "list_workingtimes/0 returns all workingtimes" do
       workingtime = workingtime_fixture()
-      assert WorkingTime.list_workingtime() == [workingtime]
+      assert WorkingTime.list_workingtimes() == [workingtime]
     end
 
     test "get_workingtime!/1 returns the workingtime with given id" do

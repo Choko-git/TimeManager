@@ -7,7 +7,7 @@ defmodule BackendWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_backend_key",
-    signing_salt: "U5WERTfl"
+    signing_salt: "46zKCL7s"
   ]
 
   socket "/socket", BackendWeb.UserSocket,
@@ -48,6 +48,5 @@ defmodule BackendWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug(Corsica, origins: "*", allow_headers: ["content-type"])
   plug BackendWeb.Router
 end

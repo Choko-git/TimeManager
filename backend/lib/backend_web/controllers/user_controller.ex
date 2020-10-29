@@ -45,4 +45,5 @@ defmodule BackendWeb.UserController do
     users = Users.get_users_by_params!(params)
     render(conn, "index.json", users: users)
   end
+
 end

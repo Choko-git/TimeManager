@@ -8,15 +8,17 @@ defmodule BackendWeb.UserControllerTest do
     email: "some email",
     password: "some password",
     right_active: true,
+    role: "some role",
     username: "some username"
   }
   @update_attrs %{
     email: "some updated email",
     password: "some updated password",
     right_active: false,
+    role: "some updated role",
     username: "some updated username"
   }
-  @invalid_attrs %{email: nil, password: nil, right_active: nil, username: nil}
+  @invalid_attrs %{email: nil, password: nil, right_active: nil, role: nil, username: nil}
 
   def fixture(:user) do
     {:ok, user} = Users.create_user(@create_attrs)
@@ -46,6 +48,7 @@ defmodule BackendWeb.UserControllerTest do
                "email" => "some email",
                "password" => "some password",
                "right_active" => true,
+               "role" => "some role",
                "username" => "some username"
              } = json_response(conn, 200)["data"]
     end
@@ -70,6 +73,7 @@ defmodule BackendWeb.UserControllerTest do
                "email" => "some updated email",
                "password" => "some updated password",
                "right_active" => false,
+               "role" => "some updated role",
                "username" => "some updated username"
              } = json_response(conn, 200)["data"]
     end

@@ -24,7 +24,7 @@ defmodule BackendWeb.WorkingtimeControllerTest do
   end
 
   describe "index" do
-    test "lists all workingtime", %{conn: conn} do
+    test "lists all workingtimes", %{conn: conn} do
       conn = get(conn, Routes.workingtime_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end

@@ -1,8 +1,8 @@
-defmodule Backend.Repo.Migrations.CreateWorkingtime do
+defmodule Backend.Repo.Migrations.CreateWorkingtimes do
   use Ecto.Migration
 
   def change do
-    create table(:workingtime) do
+    create table(:workingtimes) do
       add :start, :naive_datetime
       add :end, :naive_datetime
       add :user_id, references(:users, on_delete: :nothing)
@@ -10,6 +10,6 @@ defmodule Backend.Repo.Migrations.CreateWorkingtime do
       timestamps()
     end
 
-    create index(:workingtime, [:user_id])
+    create index(:workingtimes, [:user_id])
   end
 end

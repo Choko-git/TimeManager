@@ -6,9 +6,9 @@ defmodule Backend.UsersTest do
   describe "users" do
     alias Backend.Users.User
 
-    @valid_attrs %{email: "some email", password: "some password", right_active: true, username: "some username"}
-    @update_attrs %{email: "some updated email", password: "some updated password", right_active: false, username: "some updated username"}
-    @invalid_attrs %{email: nil, password: nil, right_active: nil, username: nil}
+    @valid_attrs %{email: "some email", password: "some password", right_active: true, role: "some role", username: "some username"}
+    @update_attrs %{email: "some updated email", password: "some updated password", right_active: false, role: "some updated role", username: "some updated username"}
+    @invalid_attrs %{email: nil, password: nil, right_active: nil, role: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -34,6 +34,7 @@ defmodule Backend.UsersTest do
       assert user.email == "some email"
       assert user.password == "some password"
       assert user.right_active == true
+      assert user.role == "some role"
       assert user.username == "some username"
     end
 
@@ -47,6 +48,7 @@ defmodule Backend.UsersTest do
       assert user.email == "some updated email"
       assert user.password == "some updated password"
       assert user.right_active == false
+      assert user.role == "some updated role"
       assert user.username == "some updated username"
     end
 

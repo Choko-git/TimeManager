@@ -16,6 +16,8 @@ services:
     command: './entrypoint.sh'
     depends_on:
       - db
+
+  # db container
   db:
     image: postgres:9.6
     environment:
@@ -28,6 +30,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # vuejs container
   vuejs:
     build:
       context: ./webTimeManager
