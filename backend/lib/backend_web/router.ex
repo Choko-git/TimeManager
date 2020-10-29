@@ -41,7 +41,7 @@ defmodule BackendWeb.Router do
     get "/vacations/:userID", VacationController, :get_all_vacations
 
   end
-
+  
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
