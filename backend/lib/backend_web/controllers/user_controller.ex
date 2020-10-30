@@ -40,7 +40,7 @@ defmodule BackendWeb.UserController do
       # conn
       # |> Plug.Conn.put_resp_cookie("token", token, http_only: false, secure: false, max_age: 604_800)
       # |> text(1)
-      render(conn, "sign.json", %{token: token, csrf: csfr, user: user})
+      render(conn, "sign.json", %{token: token, user: user})
     end
   end
 
