@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import LogIn from '../views/LogIn.vue'
+import LogIn from '../views/commons/LogIn.vue'
 import store from '../store'
 let isAuth = false;
 
