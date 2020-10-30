@@ -1,5 +1,5 @@
 <template>
-  <div id="sidemenu" v-bind:class="{ mainSidemenuPushed: managementOpen }">
+  <div id="sidemenu" v-bind:class="{ mainSidemenuPushed: managementOpen }" class="noselect">
     <div id="logo">
       <img src="../../assets/logo.svg" alt="homepage" />
     </div>
@@ -115,13 +115,13 @@ export default {
           transition: opacity $sidemenu-transition;
         }
         & .main-nav-link {
-          @include bgi-left;
+          @include bgi-left-sidemenu;
           &:hover {
             background-color: $main-color-5-opacity-25;
             text-decoration: none;
           }
           &.router-link-active {
-            box-shadow: $box-shadow;
+            box-shadow: $main-box-shadow;
             background-color: $main-color-4-opacity-25;
           }
         }
@@ -141,6 +141,7 @@ export default {
       flex-direction: column;
       & * {
         opacity: 0;
+         transition: opacity $sidemenu-transition;
       }
       &.navActive {
         width: 220px;
@@ -149,18 +150,18 @@ export default {
         }
       }
       & h1 {
-        transition: opacity $sidemenu-transition;
-        font-size: 28px;
+        font-size: 23px;
         color: #201e1e;
         font-weight: bold;
         padding: 10px;
         border-left: 8px solid #15161b81;
         background-color: #cab38d6b;
         box-shadow: 4px 5px 10px 7  px  #474e6181;
-        margin: 0 auto;
+        width: 210px;
+        margin-left: 10px;
       }
       & nav {
-        padding-top: 107px;
+        padding-top: 105px;
         list-style: none;
         & .management-nav-link {
           margin-bottom: 18px;
@@ -169,7 +170,7 @@ export default {
             text-decoration: none;
           }
           &.router-link-active {
-            box-shadow: $box-shadow;
+            box-shadow: $main-box-shadow;
             background-color: $main-color-4-opacity-25;
           }
         }

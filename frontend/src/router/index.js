@@ -26,16 +26,16 @@ const router = new VueRouter({
   routes
 })
 
-/** @todo Temp */
-isAuth = true;
-const role = 'manager'
-router.addRoutes(mainRoutes);
-router.addRoutes(['manager', 'admin'].includes(role) ? managementRoutes : employeeRoutes)
-router.addRoutes([{
-  path: '*',
-  redirect: '/home'
-}])
-/** ---------- */
+// /** @todo Temp */
+// isAuth = true;
+// const role = 'manager'
+// router.addRoutes(mainRoutes);
+// router.addRoutes(['manager', 'admin'].includes(role) ? managementRoutes : employeeRoutes)
+// router.addRoutes([{
+//   path: '*',
+//   redirect: '/home'
+// }])
+// /** ---------- */
 
 router.beforeEach((to, from, next) => {
   console.log('ROUTER' + to, from);
