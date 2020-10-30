@@ -74,6 +74,6 @@ export {
     navRoutes
 }
 
-/** @todo Temp */
-createMainRoutes('manager')
-/** ---------- */
+// /** @todo Temp */
+// createMainRoutes('manager')
+// /** ---------- */
