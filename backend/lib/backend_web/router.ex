@@ -3,6 +3,8 @@ defmodule BackendWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Backend.Plugs.Authenticate
+
   end
 
   scope "/api", BackendWeb do
@@ -10,9 +12,9 @@ defmodule BackendWeb.Router do
 
     # Routes pour Users
     resources "/users", UserController, except: [:index]
+    post "/users/log_in", UserController, :log_in
     get "/users", UserController, :get_users_params # team ou role.
     put "/users/userID", UserController, :update
-
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingtimeController, :get_all

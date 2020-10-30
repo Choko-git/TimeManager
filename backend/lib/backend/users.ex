@@ -121,4 +121,10 @@ defmodule Backend.Users do
     |> Repo.all()
   end
 
+  def get_by_email(user) do
+    from(u in User,
+      where: u.email == ^user["email"],
+    )
+    |> Repo.one()
+  end
 end
