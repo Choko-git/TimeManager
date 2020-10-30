@@ -5,16 +5,22 @@
     </div>
     <div id="navigation">
       <div id="main-nav">
-        <ul v-for="category in navElement" v-bind:key="category.name">
+        <nav v-for="category in navElement" v-bind:key="category.name">
           <h1>{{ category.name }}</h1>
-          <li
+          <router-link
             v-for="link in category.links"
-            v-bind:key="link.title"
+            v-bind:key="link.route"
             class="main-nav-link"
+            tag="li"
+            :to="link.route"
+            v-bind:style="{
+              'background-image': `url(${require('../../assets/icons/' +
+                link.icon +
+                '.svg')})`,
+            }"
+            >{{ link.title }}</router-link
           >
-            {{ link.title }}
-          </li>
-        </ul>
+        </nav>
       </div>
     </div>
   </div>
@@ -27,9 +33,17 @@ export default {
   data: function () {
     return {
       navElement: navElement,
+      managementOpen: false
     };
   },
-  created: function () {},
+  created: function () {
+    console.log(this.navElement);
+  },
+  watch: {
+    $route(to, from) {
+      console.log(to, from);
+    },
+  },
 };
 </script>
 
@@ -55,7 +69,7 @@ export default {
   flex-direction: column;
   & #main-nav {
     margin-top: 20px;
-    & ul {
+    & nav {
       border-top: $sidemenu-border;
       padding-top: 20px;
       padding-left: 40px;
@@ -63,25 +77,26 @@ export default {
       list-style: none;
       & h1 {
         font-size: 22px;
-        color: #bacdb0;
+        color: $sidemenu-title-color;
       }
       & .main-nav-link {
+        margin-top: 10px;
+        margin-bottom: 20px;
         cursor: pointer;
+        padding: 10px 10px 10px 50px;
+        border-radius: 3px;
         font-size: 17px;
         color: white;
-        text-shadow: 1px 1px 3px rgba(172, 183, 213, 0.089);
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding: 10px 20px 10px 50px;
-        border-radius: 3px;
+        text-shadow: $text-shadow;
         transition: background-color 0.2s ease;
+        @include bgi-left;
         &:hover {
-          background-color: $main-color-5-opacity;
+          background-color: $main-color-5-opacity-25;
           text-decoration: none;
         }
         &.router-link-active {
-          box-shadow: 0px 0 10px 0 rgba(102, 106, 114, 0.2);
-          background-color: #5753669a;
+          box-shadow: $box-shadow;
+          background-color: $main-color-4-opacity-25;
         }
       }
     }
