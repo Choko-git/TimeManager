@@ -29,22 +29,20 @@ const allMainRoutes = {
         icon: 'clock'
     },
 }
-const allManagementRoutes = {
-    dashboard: {
+const allManagementRoutes = [
+    {
         route: '/management/dashboard',
         title: 'Dashboard'
-    },
-    employees: {
+    }, {
         route: '/management/employees',
         title: 'Employees'
-    },
-    teams: {
+    }, {
         route: '/management/teams',
         title: 'Teams'
-    }
-}
+    }]
 
 function createMainRoutes(role) {
+    console.log(role);
     const mainLinks = [allMainRoutes.home];
     const isEmployee = role === 'employee';
     mainLinks.push(isEmployee ? allMainRoutes.myTeams : allMainRoutes.manage)
@@ -59,7 +57,7 @@ function createMainRoutes(role) {
         })
     }
     if (!isEmployee) {
-        managementNavRoutes = allManagementRoutes;
+        allManagementRoutes.map(_ => managementNavRoutes.push(_));
     }
 }
 
