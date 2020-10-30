@@ -1,7 +1,13 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import LogIn from '../views/commons/LogIn.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 import store from '../store'
+import LogIn from '../views/commons/LogIn.vue'
+
+/** IMPORT ROUTES */
+import mainRoutes from './main';
+import employeeRoutes from './employee';
+import managementRoutes from './management';
+
 let isAuth = false;
 
 Vue.use(VueRouter)
@@ -21,16 +27,23 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'LogIn' && !isAuth) next({ name: 'LogIn' })
+  console.log(isAuth);
+  if (to.name !== 'LogIn' && !isAuth) {
+    next({ name: 'LogIn' })
+  }
   else next()
-})  
+})
 
 store.watch(
   (state) => state.auth,
   function (auth) {
     isAuth = auth.isAuth;
-    
+    const role = auth.user.role
+    router.addRoutes(mainRoutes);
+    router.addRoutes(['manager', 'admin'].includes(role) ? managementRoutes : employeeRoutes)
+    console.log(router);
   }
 )
+
 
 export default router
