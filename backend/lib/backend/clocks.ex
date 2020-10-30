@@ -109,9 +109,6 @@ defmodule Backend.Clocks do
   def change_clock(%Clock{} = clock, attrs \\ %{}) do
     Clock.changeset(clock, attrs)
   end
-<<<<<<< HEAD
-end
-=======
 
   def get_clock_one(params) do
     from(clocks in Clock,
@@ -121,4 +118,4 @@ end
     |> Repo.one()
   end
 end
->>>>>>> thomas
+
