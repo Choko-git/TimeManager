@@ -1,6 +1,6 @@
 FROM node:latest
 
-WORKDIR /webTimeManager
+WORKDIR /frontend
 COPY . .
 RUN npm install
 RUN npm install -g vue-cli

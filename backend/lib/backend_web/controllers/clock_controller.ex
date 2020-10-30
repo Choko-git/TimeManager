@@ -7,11 +7,11 @@ defmodule BackendWeb.ClockController do
   action_fallback BackendWeb.FallbackController
 
   def index(conn, _params) do
-    clocks = Clocks.list_clocks()
-    render(conn, "index.json", clocks: clocks)
+    clock = Clocks.list_clocks()
+    render(conn, "index.json", clock: clock)
   end
 
-  def create(conn, %{"clock" => clock_params}) do
+  def create(conn, clock_params) do
     with {:ok, %Clock{} = clock} <- Clocks.create_clock(clock_params) do
       conn
       |> put_status(:created)
@@ -20,13 +20,13 @@ defmodule BackendWeb.ClockController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, id) do
     clock = Clocks.get_clock!(id)
     render(conn, "show.json", clock: clock)
   end
 
-  def update(conn, %{"id" => id, "clock" => clock_params}) do
-    clock = Clocks.get_clock!(id)
+  def update(conn, clock_params) do
+    clock = Clocks.get_clock!(clock_params["id"])
 
     with {:ok, %Clock{} = clock} <- Clocks.update_clock(clock, clock_params) do
       render(conn, "show.json", clock: clock)
@@ -39,5 +39,15 @@ defmodule BackendWeb.ClockController do
     with {:ok, %Clock{}} <- Clocks.delete_clock(clock) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def get_one(conn,params) do
+    clock = Clocks.get_clock_one(params)
+    render(conn, "show.json", clock: clock)
+  end
+
+  def get_all(conn,params) do
+    clocks = Clocks.get_clocks(params)
+    render(conn, "index.json", clocks: clocks)
   end
 end

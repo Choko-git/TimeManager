@@ -113,7 +113,7 @@ defmodule Backend.WorkingTime do
 
   # Récupère tous les WorkingTime
   def get_working_time_all(params) do
-    where = [userID: params["userID"]]
+    where = [user_id: params["userID"]]
 
     startDate =
       if params["start"] do
@@ -127,7 +127,7 @@ defmodule Backend.WorkingTime do
       else
         true
       end
-    WorkingTime
+    Workingtime
     |> where(^where)
     |> where(^startDate)
     |> where(^endDate)

@@ -14,7 +14,6 @@ defmodule BackendWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     hash = Bcrypt.add_hash(user_params["password"])
     user_params = Map.replace!(user_params, "password", hash[:password_hash])
-
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -52,8 +51,8 @@ defmodule BackendWeb.UserController do
     render(conn, "show.json", user: user)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Users.get_user!(id)
+  def update(conn, user_params) do
+    user = Users.get_user!(user_params["id"])
 
     with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
       render(conn, "show.json", user: user)
@@ -62,7 +61,6 @@ defmodule BackendWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     user = Users.get_user!(id)
-
     with {:ok, %User{}} <- Users.delete_user(user) do
       send_resp(conn, :no_content, "")
     end

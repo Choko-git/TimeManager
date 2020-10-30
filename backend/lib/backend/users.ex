@@ -103,10 +103,21 @@ defmodule Backend.Users do
   end
 
   def get_users_by_params!(params) do
-    from(users in User,
-      where:
-        users.supervisor_id == ^params["supervisor_id"] or users.role_id == ^params["role_id"]
-    )
+    roleCheck =
+      if params["role"] do
+        dynamic([user], user.role == ^params["role"])
+      else
+        true
+      end
+    gradeCheck =
+      if params["surpervisor_id"] do
+        dynamic([user], user.surpervisor_id == ^params["surpervisor_id"])
+      else
+        true
+      end
+    User
+    |> where(^roleCheck)
+    |> where(^gradeCheck)
     |> Repo.all()
   end
 
