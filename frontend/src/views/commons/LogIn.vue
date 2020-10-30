@@ -36,7 +36,7 @@ export default {
               isAuth: true,
               user: res.data.user,
             });
-            this.$router.push("/");
+            this.$router.push("/home");
           }
         })
         .catch((err) => {

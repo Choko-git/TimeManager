@@ -8,24 +8,24 @@ let navRoutes = [];
 
 let allRoutes = {
     home: {
-        route: 'home',
+        route: '/home',
         title: 'Home',
-        icone: ''
+        icon: 'home'
     },
     myTeams: {
         route: 'my-teams',
         title: 'My Teams',
-        icone: ''
+        icon: 'users'
     },
     manage: {
-        route: '/management',
+        route: '/managements',
         title: 'Management',
-        icone: ''
+        icon: 'cogs'
     },
     declare: {
         route: '/declare',
         title: 'Declare',
-        icone: ''
+        icon: 'clock'
     }
 }
 

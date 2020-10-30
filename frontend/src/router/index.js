@@ -27,9 +27,12 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(isAuth);
+  console.log('ROUTER' + to, from);
   if (to.name !== 'LogIn' && !isAuth) {
     next({ name: 'LogIn' })
+  }
+  else if (!checkIfRouteExist(to.path)) {
+    next({ name: 'Home' })
   }
   else next()
 })
@@ -44,6 +47,12 @@ store.watch(
     console.log(router);
   }
 )
+
+const checkIfRouteExist = (route) => {
+  console.log(route);
+  console.log(router)
+  return true
+}
 
 
 export default router
