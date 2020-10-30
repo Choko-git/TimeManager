@@ -34,7 +34,7 @@ export default {
 
 <style lang="scss">
 .list-dropdown {
-  transition: all 0.5s;
+  transition: all .1s;
   position: absolute;
   top: 50%;
   transform: translateY(50%);
@@ -48,7 +48,7 @@ export default {
     padding: 0 0 0 10px;
     margin: 0;
     & li {
-      transition: all 0.1s;
+      transition: all .1s;
       cursor: pointer;
       color: $darker-grey;
       border-top: $grey-slight-border;
