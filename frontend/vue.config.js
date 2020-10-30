@@ -1,11 +1,12 @@
-//const webpack = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
-    //configureWebpack: {
-    //  plugins: [
-    //    new webpack.ProvidePlugin({jQuery: 'jquery'})
-    //  ],
-    //},
+    configureWebpack: {
+      plugins: [
+        //'/plugins/vue-morris'
+        new webpack.ProvidePlugin({jQuery: 'jquery'})
+      ],
+    },
     css: {
       loaderOptions: {
         scss: {

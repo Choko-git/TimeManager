@@ -2,7 +2,7 @@
   <donut-chart
     id="donut"
     :data="donutData"
-    colors='["#FF6384", "#FF6384", "#FF6384"]'
+    colors='["#FF6384", "#36A2EB"]'
     resize="true">
   </donut-chart>
 
@@ -20,9 +20,8 @@ export default {
   data: function() {
     return {
     donutData: [
-      { label: 'Red', value: 300},
-      { label: 'Blue', value: 50},
-      { label: 'Yellow', value: 100},
+      { label: 'On work', value: 300},
+      { label: 'Off work', value: 50},
     ]
     };
   },

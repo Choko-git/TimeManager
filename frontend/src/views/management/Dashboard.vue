@@ -1,13 +1,22 @@
 <template>
-    <Donut />
+  <div id="content">
+    <div id="left">
+      <Donut />
+    </div>
+    <div id="right">
+      <Bar />
+    </div>
+  </div>
 </template>
 
 <script>
 import Donut from "../../components/chart/Donut"
+import Bar from "../../components/chart/Bar"
 
 export default {
     components: {
         Donut,
+        Bar,
     },
 };
 </script>
