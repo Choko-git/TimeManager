@@ -5,7 +5,7 @@ config :backend, Backend.Repo,
   username: "postgres",
   password: "root",
   database: "backend_dev",
-  hostname: "db",
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

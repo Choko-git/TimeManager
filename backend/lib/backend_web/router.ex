@@ -43,6 +43,10 @@ defmodule BackendWeb.Router do
     post "/vacations", VacationController, :create
     delete "/vacations/:id", VacationController, :delete
     put "/vacations/:id", VacationController, :update
+
+    # Routes pour belongs // Utilisateurs -> Team
+    get "/belongs", BelongController, :get_belong_info
+    post "/belongs/:teams_id/:user_id", BelongController, :create
   end
 
   # Enables LiveDashboard only for development

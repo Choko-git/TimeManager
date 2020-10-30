@@ -7,6 +7,8 @@ defmodule Backend.Belongs do
   alias Backend.Repo
 
   alias Backend.Belongs.Belong
+  alias Backend.Teams.Team
+  alias Backend.Users.User
 
   @doc """
   Returns the list of belongs.
@@ -101,4 +103,28 @@ defmodule Backend.Belongs do
   def change_belong(%Belong{} = belong, attrs \\ %{}) do
     Belong.changeset(belong, attrs)
   end
+
+  def get_info(params) do
+
+    startDate =
+      if params["user_id"] do
+        from(belong in Belong,
+        where:
+          belong.user_id == ^params["user_id"]
+      )
+      else
+        true
+      end
+    endDate =
+      if params["team_id"] do
+        dynamic([belong], belong.teams_id == ^params["team_id"])
+      else
+        true
+      end
+    Belong
+    |> where(^startDate)
+    |> where(^endDate)
+    |> Repo.all()
+  end  
+
 end
