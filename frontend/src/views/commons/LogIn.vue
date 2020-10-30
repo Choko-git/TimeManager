@@ -29,10 +29,15 @@ export default {
       const url = "http://localhost:4000/api/users/log_in";
       axios
         .post(url, { email, password })
-        .then((res) => {
-          console.log(res);
-          localStorage.setItem("token", res.data.token);
-          this.$store.dispatch("change", { isAuth: true, user: res.data.user });
+        .then(async (res) => {
+          if (res.data) {
+            localStorage.setItem("token", res.data.token);
+            await this.$store.dispatch("change", {
+              isAuth: true,
+              user: res.data.user,
+            });
+            this.$router.push("/");
+          }
         })
         .catch((err) => {
           console.log(err);
