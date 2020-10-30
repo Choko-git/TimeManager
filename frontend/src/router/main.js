@@ -3,7 +3,7 @@ import Declare from '../views/commons/Declare.vue';
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home',
         component: Home
     },
