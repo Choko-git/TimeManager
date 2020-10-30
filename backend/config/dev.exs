@@ -5,7 +5,7 @@ config :backend, Backend.Repo,
   username: "postgres",
   password: "root",
   database: "backend_dev",
-  hostname: "localhost",
+  hostname: "db",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -63,3 +63,5 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :joken, default_signer: "é'-154fgd445EQDGù^ù$ù"

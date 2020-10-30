@@ -1,0 +1,17 @@
+@mixin sidemenu-format {
+    width: $sidemenu-width;
+    background-color: $main-color-1;
+}
+
+@mixin header-format {
+    height: $header-height;
+    background-color: $main-color-2;
+}
+
+@mixin template-format {
+    height: $template-height;
+    width: $template-width;
+    background-color: $main-color-3;
+}
+
+

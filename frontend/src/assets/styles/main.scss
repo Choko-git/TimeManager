@@ -1,0 +1,12 @@
+@import './settings/colors.scss';
+@import './settings/sizes.scss';
+@import './settings/border.scss';
+
+@import './mixins/cards.scss';
+@import './mixins/containers.scss';
+
+.fwh {
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+}
