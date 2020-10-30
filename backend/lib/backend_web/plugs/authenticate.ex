@@ -7,7 +7,7 @@ defmodule Backend.Plugs.Authenticate do
   end
 
   def call(conn, _) do
-    if conn.request_path !== "/api/users/log_in" do
+    if conn.request_path !== "/api/users/log_in" && conn.request_path !== "/api/users" do
       IO.inspect(conn)
       authorization = List.keyfind(conn.req_headers, "authorization", 0)
       token = Enum.at(String.split(elem(authorization, 1)), 1)
