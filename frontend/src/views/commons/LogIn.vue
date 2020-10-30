@@ -22,6 +22,7 @@ export default {
       password: null,
     };
   },
+  props: ['name'],
   methods: {
     logIn() {
       const email = this.email;

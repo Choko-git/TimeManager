@@ -6,6 +6,11 @@ import Teams from '../views/management/Teams.vue';
 
 const routes = [
     {
+        path: '/management',
+        name: 'Dashboard',
+        component: Dashboard
+    },
+    {
         path: '/management/dashboard',
         name: 'Dashboard',
         component: Dashboard

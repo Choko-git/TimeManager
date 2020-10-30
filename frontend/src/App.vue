@@ -34,9 +34,11 @@ export default {
   height: 100vh;
   width: 100vw;
   & #left {
+    z-index: 0;
         @include sidemenu-format
   }
   & #right {
+    z-index: 1;
     height: 100%;
     width: 100%;
     & #top {
