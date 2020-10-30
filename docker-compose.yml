@@ -7,10 +7,10 @@ services:
   phoenix:
     # The build parameters for this container.
     build:
-      context: ./apiTimeManager
+      context: ./backend
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgres://postgres@db5432/apitimemanager_dev
+      DATABASE_URL: postgres://postgres@db5432/backend_dev
     ports:
       - "4000:4000"
     command: './entrypoint.sh'
@@ -33,7 +33,7 @@ services:
   # vuejs container
   vuejs:
     build:
-      context: ./webTimeManager
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - '8080:8080'

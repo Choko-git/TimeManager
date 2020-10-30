@@ -15,6 +15,6 @@ defmodule Backend.Vacations.Vacation do
   def changeset(vacation, attrs) do
     vacation
     |> cast(attrs, [:start, :end, :accepted, :seen, :user_id])
-    |> validate_required([:start, :end, :accepted, :seen])
+    |> validate_required([:start, :end, :user_id])
   end
 end

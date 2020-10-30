@@ -11,6 +11,7 @@ defmodule BackendWeb.Router do
     # Routes pour Users
     resources "/users", UserController, except: [:index]
 <<<<<<< HEAD
+<<<<<<< HEAD
     get "/users", UserController, :all_users_params
 <<<<<<< HEAD
 =======
@@ -19,6 +20,11 @@ defmodule BackendWeb.Router do
 =======
     put "/users/userID", UserController, :update
 >>>>>>> origin/Matthieu
+=======
+    get "/users", UserController, :get_users_params # team ou role.
+    get "/users", UserController, :all_users_params
+    put "/users/userID", UserController, :update
+>>>>>>> thomas
 
     # Routes pour WorkingTime
     get "/workingtimes/:userID", WorkingtimeController, :get_all
@@ -26,17 +32,19 @@ defmodule BackendWeb.Router do
     put "/workingtimes/:id", WorkingtimeController, :update
     post "/workingtimes", WorkingtimeController, :create
     delete "/workingtimes/:id",WorkingtimeController, :delete
-    get "/workingtimes/:user_id", WorkingtimeController, :show
+
     # Routes pour Clocks
-    resources "/clocks", ClockController, except: [:index]
-    post "/clocks/:userID", ClockController, :create
-    get "/clocks/:userID", ClockController, :index
-    put "/clocks/:userID", ClockController, :update
-    get "/clocks/:userID/clockID", ClockController, :get_one
+    get "/clocks/:userID", ClockController, :show
+    post "/clocks", ClockController, :create
+    get "/clocks/:userID", ClockController, :get_all
+    put "/clocks/:id", ClockController, :update
+    get "/clocks/:userID/:clockID", ClockController, :get_one
+    delete "/clocks/:id", ClockController, :delete
 
     # Routes pour Teams
     get "/teams/:teamID", TeamController, :show
     post "/teams", TeamController, :create
+<<<<<<< HEAD
 <<<<<<< HEAD
     delete "/teams/:team_name", TeamController, :delete
     #update "/teams/:teamID", TeamController, :update
@@ -45,11 +53,19 @@ defmodule BackendWeb.Router do
     put "/teams", TeamController, :update
     get "/teams", TeamController, :get_all_teams
 >>>>>>> thomas
+=======
+    delete "/teams/:teamID", TeamController, :delete
+    put "/teams", TeamController, :update
+    get "/teams", TeamController, :get_all_teams
+>>>>>>> thomas
 
     # Routes pour Vacations
-    resources "/vacations", VacationController, except: [:index]
+    get "/vacations/:userID", VacationController, :show
     get "/vacations/:userID", VacationController, :get_all_vacations
-
+    get "/vacations/:userID/:vacationID", VacationController, :get_vacation
+    post "/vacations", VacationController, :create
+    delete "/vacations/:id", VacationController, :delete
+    put "/vacations/:id", VacationController, :update
   end
 
   # Enables LiveDashboard only for development
