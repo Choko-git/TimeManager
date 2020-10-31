@@ -24,9 +24,9 @@ export default {
     return {
       barData: [
         { year: '2013', and: 10, ios: 5, win: 2 },
-        { year: '2014', and: 5, ios: 15, win: 1 },
-        { year: '2015', and: 15,ios: 10, win: 6 },
-        { year: '2016', and: 5, ios: 6, win: 13 },
+        //{ year: '2014', and: 5, ios: 15, win: 1 },
+        //{ year: '2015', and: 15,ios: 10, win: 6 },
+        //{ year: '2016', and: 5, ios: 6, win: 13 },
       ]
     };
   },

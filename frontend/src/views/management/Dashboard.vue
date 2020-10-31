@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <div id="left">
+    <div id="middle">
       <Donut />
     </div>
     <div id="right">
