@@ -2,46 +2,42 @@
   <div id="log-in">
     <div id="page-content">
       <h1>Log In</h1>
-      <form id="log-in-form" v-on:submit.prevent="logIn()">
-        <input type="text" placeholder="Email" v-model="email" />
-        <input type="password" placeholder="Password" v-model="password" />
-        <button type="submit">Log In</button>
-      </form>
+      <FormClassic
+        submitButtonName="Log In"
+        :formValidMethod="onUserLogged"
+        httpMethod="post"
+        apiRoute="users/log_in"
+        :fields="[
+          { name: 'email', placeholder: 'Email', type: 'email' },
+          { name: 'password', placeholder: 'Password', type: 'password' },
+        ]"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import FormClassic from "@/components/form/FormClassic";
 
 export default {
-  name: "LogIn",
+  components: { FormClassic },
   data: function () {
     return {
       email: null,
       password: null,
+      error: null,
     };
   },
   methods: {
-    logIn() {
-      const email = this.email;
-      const password = this.password;
-      const url = "http://localhost:4000/api/users/log_in";
-      axios
-        .post(url, { email, password })
-        .then(async (res) => {
-          if (res.data) {
-            localStorage.setItem("token", res.data.token);
-            await this.$store.dispatch("change", {
-              isAuth: true,
-              user: res.data.user,
-            });
-            this.$router.push("/management/dashboard");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
+    async onUserLogged(res) {
+      if (res.data) {
+        localStorage.setItem("token", res.data.token);
+        await this.$store.dispatch("change", {
+          isAuth: true,
+          user: res.data.user,
         });
+        this.$router.push("/home");
+      }
     },
   },
 };
@@ -50,34 +46,16 @@ export default {
 <style lang="scss">
 #log-in {
   @include classic-card;
+  display: flex;
   width: 300px;
   margin: auto;
   transform: translateY(-25%);
-  display: flex;
   & #page-content {
-    display: flex;
+    @include flex-container-column;
     margin: auto;
-    flex-direction: column;
     & h1 {
       margin: 0;
-    }
-    & #log-in-form {
-      display: flex;
-      flex-direction: column;
-      & * {
-        margin-top: 20px;
-      }
-      & input {
-        padding: 5px;
-        border: $classic-border;
-      }
-      & button {
-        background-color: $main-color-2;
-        color: white;
-        border: $classic-border;
-        width: 100px;
-        padding: 5px;
-      }
+      font-size: 30px;
     }
   }
 }

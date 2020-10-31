@@ -1,23 +1,36 @@
 <template>
-  <div id="sidemenu">
+  <div id="sidemenu" v-bind:class="{ mainSidemenuPushed: managementOpen }" class="noselect">
     <div id="logo">
       <img src="../../assets/logo.svg" alt="homepage" />
     </div>
     <div id="navigation">
       <div id="main-nav">
-        <nav v-for="category in navElement" v-bind:key="category.name">
-          <h1>{{ category.name }}</h1>
+        <nav v-for="category in navRoutes" v-bind:key="category.name">
+          <h1>
+            {{ category.name }}
+          </h1>
           <router-link
             v-for="link in category.links"
             v-bind:key="link.route"
-            class="main-nav-link"
+            class="main-nav-link nav-link"
             tag="li"
             :to="link.route"
             v-bind:style="{
-              'background-image': `url(${require('../../assets/icons/' +
-                link.icon +
-                '.svg')})`,
+              backgroundImage: `url(${require(`../../assets/icons/${link.icon}.svg`)})`,
             }"
+            >{{ link.title }}</router-link
+          >
+        </nav>
+      </div>
+      <div v-bind:class="{ navActive: managementOpen }" id="manage-nav">
+        <h1>Management</h1>
+        <nav>
+          <router-link
+            v-for="link in managementNavRoutes"
+            v-bind:key="link.route"
+            class="management-nav-link nav-link"
+            tag="li"
+            :to="link.route"
             >{{ link.title }}</router-link
           >
         </nav>
@@ -27,21 +40,27 @@
 </template>
 
 <script>
-import navElement from "./nav-elements";
+import { navRoutes, managementNavRoutes } from "./nav-elements";
 
 export default {
   data: function () {
     return {
-      navElement: navElement,
-      managementOpen: false
+      navRoutes: navRoutes,
+      managementNavRoutes: managementNavRoutes,
+      managementOpen: false,
     };
   },
   created: function () {
-    console.log(this.navElement);
+    this.setManagementOpen(this.$route.fullPath);
   },
   watch: {
-    $route(to, from) {
-      console.log(to, from);
+    $route(to) {
+      this.setManagementOpen(to.fullPath);
+    },
+  },
+  methods: {
+    setManagementOpen: function (path) {
+      this.managementOpen = path.includes("management");
     },
   },
 };
@@ -49,63 +68,136 @@ export default {
 
 <style lang="scss">
 #sidemenu {
-  z-index: 30;
+  position: relative;
+  padding-top: 50px;
+
   & #logo {
-    display: flex;
-    max-width: 100%;
-    height: auto;
-    margin-top: 50px;
+    @include flex-container;
+    transition: all $sidemenu-transition;
     & img {
       margin: auto;
       width: 120px;
-      height: auto;
+      height: 120px;
+      transition: all $sidemenu-transition;
     }
   }
-}
-
-#navigation {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  & #main-nav {
+  & #navigation {
     margin-top: 20px;
-    & nav {
-      border-top: $sidemenu-border;
-      padding-top: 20px;
-      padding-left: 40px;
-
-      list-style: none;
-      & h1 {
-        font-size: 22px;
-        color: $sidemenu-title-color;
-      }
-      & .main-nav-link {
-        margin-top: 10px;
-        margin-bottom: 20px;
-        cursor: pointer;
-        padding: 10px 10px 10px 50px;
-        border-radius: 3px;
-        font-size: 17px;
-        color: white;
-        text-shadow: $text-shadow;
-        transition: background-color 0.2s ease;
-        @include bgi-left;
-        &:hover {
-          background-color: $main-color-5-opacity-25;
-          text-decoration: none;
+    padding: 0;
+    @include flex-container-column  ;
+    & .nav-link {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      padding: 10px 10px 10px 50px;
+      border-radius: 3px;
+      font-size: 17px;
+      color: white;
+      text-shadow: $text-shadow;
+      transition: background-color 0.15s ease, width $sidemenu-transition;
+    }
+    & #main-nav {
+      & nav {
+        border-top: $sidemenu-border;
+        padding-top: 20px;
+        padding-left: 40px;
+        list-style: none;
+        transition: padding-left $sidemenu-transition;
+        & h1 {
+          height: 30px;
+          font-size: 22px;
+          color: $sidemenu-title-color;
+          opacity: 1;
+          transition: opacity $sidemenu-transition;
         }
-        &.router-link-active {
-          box-shadow: $box-shadow;
-          background-color: $main-color-4-opacity-25;
+        & .main-nav-link {
+          @include bgi-left-sidemenu;
+          &:hover {
+            background-color: $main-color-5-opacity-25;
+            text-decoration: none;
+          }
+          &.router-link-active {
+            box-shadow: $main-box-shadow;
+            background-color: $main-color-4-opacity-25;
+          }
+        }
+      }
+    }
+
+    #manage-nav {
+      padding-top: 20px;
+      transition: width $sidemenu-transition;
+      position: absolute;
+      background-color: $main-color-6;
+      height: 100vh;
+      width: 0;
+      top: 0;
+      right: 0;
+      display: flex;  
+      flex-direction: column;
+      & * {
+        opacity: 0;
+         transition: opacity $sidemenu-transition;
+      }
+      &.navActive {
+        width: 220px;
+        * {
+          opacity: 1;
+        }
+      }
+      & h1 {
+        font-size: 23px;
+        color: #201e1e;
+        font-weight: bold;
+        padding: 10px;
+        border-left: 8px solid #15161b81;
+        background-color: #cab38d6b;
+        box-shadow: 4px 5px 10px 7  px  #474e6181;
+        width: 210px;
+        margin-left: 10px;
+      }
+      & nav {
+        padding-top: 105px;
+        list-style: none;
+        & .management-nav-link {
+          margin-bottom: 18px;
+          &:hover {
+            background-color: $main-color-5-opacity-25;
+            text-decoration: none;
+          }
+          &.router-link-active {
+            box-shadow: $main-box-shadow;
+            background-color: $main-color-4-opacity-25;
+          }
         }
       }
     }
   }
-}
-
-.sidebar-link {
-  &:hover {
-    color: #b3bbd6;
+  &.mainSidemenuPushed {
+    & #logo {
+      display: flex;
+      max-width: 100%;
+      height: auto;
+      width: 80px;
+      & img {
+        width: 60px;
+      }
+    }
+    & #navigation {
+      & #main-nav {
+        & nav {
+          padding-left: 10px !important;
+          & h1 {
+            opacity: 0;
+          }
+          & .main-nav-link {
+            width: 40px;
+            color: $main-color-1-opacity-0;
+          }
+        }
+      }
+    }
   }
 }
 </style>

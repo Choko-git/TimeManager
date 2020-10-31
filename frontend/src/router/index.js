@@ -26,13 +26,21 @@ const router = new VueRouter({
   routes
 })
 
+// /** @todo Temp */
+// isAuth = true;
+// const role = 'manager'
+// router.addRoutes(mainRoutes);
+// router.addRoutes(['manager', 'admin'].includes(role) ? managementRoutes : employeeRoutes)
+// router.addRoutes([{
+//   path: '*',
+//   redirect: '/home'
+// }])
+// /** ---------- */
+
 router.beforeEach((to, from, next) => {
   console.log('ROUTER' + to, from);
   if (to.name !== 'LogIn' && !isAuth) {
     next({ name: 'LogIn' })
-  }
-  else if (!checkIfRouteExist(to.path)) {
-    next({ name: 'Home' })
   }
   else next()
 })
@@ -44,15 +52,11 @@ store.watch(
     const role = auth.user.role
     router.addRoutes(mainRoutes);
     router.addRoutes(['manager', 'admin'].includes(role) ? managementRoutes : employeeRoutes)
-    console.log(router);
+    router.addRoutes([{
+      path: '*',
+      redirect: '/home'
+    }])
   }
 )
-
-const checkIfRouteExist = (route) => {
-  console.log(route);
-  console.log(router)
-  return true
-}
-
 
 export default router

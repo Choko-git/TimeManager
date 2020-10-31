@@ -34,11 +34,12 @@ export default {
   height: 100vh;
   width: 100vw;
   & #left {
+    z-index: 0;
         @include sidemenu-format
   }
   & #right {
-    height: 100%;
-    width: 100%;
+    z-index: 1;
+    @include flex-container-column;
     & #top {
       width: 100%;
         @include header-format
@@ -46,8 +47,7 @@ export default {
     & #bottom {
         @include template-format;
         & #template {
-          height: 100%;
-          display: flex;
+          @include flex-container-column;
         }
     }
   }

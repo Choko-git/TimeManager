@@ -2,11 +2,12 @@ import store from '../../store'
 
 store.watch(
     (state) => state.auth,
-    (auth) => auth.isAuth ? createRoutes(auth.user.role) : deleteRoutes()
+    (auth) => auth.isAuth ? createMainRoutes(auth.user.role) : deleteRoutes()
 )
 let navRoutes = [];
+let managementNavRoutes = [];
 
-let allRoutes = {
+const allMainRoutes = {
     home: {
         route: '/home',
         title: 'Home',
@@ -18,7 +19,7 @@ let allRoutes = {
         icon: 'users'
     },
     manage: {
-        route: '/managements',
+        route: '/management',
         title: 'Management',
         icon: 'cogs'
     },
@@ -26,12 +27,25 @@ let allRoutes = {
         route: '/declare',
         title: 'Declare',
         icon: 'clock'
-    }
+    },
 }
+const allManagementRoutes = [
+    {
+        route: '/management/dashboard',
+        title: 'Dashboard'
+    }, {
+        route: '/management/employees',
+        title: 'Employees'
+    }, {
+        route: '/management/teams',
+        title: 'Teams'
+    }]
 
-function createRoutes(role) {
-    const mainLinks = [allRoutes.home];
-    mainLinks.push(role === 'employee' ? allRoutes.myTeams : allRoutes.manage)
+function createMainRoutes(role) {
+    console.log(role);
+    const mainLinks = [allMainRoutes.home];
+    const isEmployee = role === 'employee';
+    mainLinks.push(isEmployee ? allMainRoutes.myTeams : allMainRoutes.manage)
     navRoutes.push({
         name: 'Main',
         links: mainLinks
@@ -39,13 +53,25 @@ function createRoutes(role) {
     if (role !== 'admin') {
         navRoutes.push({
             name: 'Clock',
-            links: [allRoutes.declare]
+            links: [allMainRoutes.declare]
         })
+    }
+    if (!isEmployee) {
+        allManagementRoutes.map(_ => managementNavRoutes.push(_));
     }
 }
 
+
 function deleteRoutes() {
     navRoutes = [];
+    managementNavRoutes = [];
 }
 
-export default navRoutes
+export {
+    managementNavRoutes,
+    navRoutes
+}
+
+// /** @todo Temp */
+// createMainRoutes('manager')
+// /** ---------- */
