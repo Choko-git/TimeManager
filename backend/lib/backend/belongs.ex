@@ -117,7 +117,7 @@ defmodule Backend.Belongs do
       end
     endDate =
       if params["team_id"] do
-        dynamic([belong], belong.teams_id == ^params["team_id"])
+        dynamic([belong], belong.team_id == ^params["team_id"])
       else
         true
       end
@@ -125,6 +125,6 @@ defmodule Backend.Belongs do
     |> where(^startDate)
     |> where(^endDate)
     |> Repo.all()
-  end  
+  end
 
 end

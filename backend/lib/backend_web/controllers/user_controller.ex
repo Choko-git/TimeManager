@@ -15,8 +15,7 @@ defmodule BackendWeb.UserController do
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> render("show_create.json", user: user)
     end
   end
 
@@ -40,9 +39,19 @@ defmodule BackendWeb.UserController do
     end
   end
 
-  def get_users_params(conn, params) do
-    users = Users.get_users_by_params!(params)
+  #def get_users_params(conn, params) do
+    #users = Users.get_users_by_params!(params)
+   # render(conn, "index.json", users: users)
+  #end
+
+  def get_all_users(conn,params) do
+    users = Users.get_users_with_teams!()
     render(conn, "index.json", users: users)
+  end
+
+  def get_user_teams(conn, params) do
+    user = Users.get_user_with_teams!(params)
+    render(conn, "show.json", user: user)
   end
 
 end

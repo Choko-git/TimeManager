@@ -5,7 +5,8 @@ defmodule Backend.WorkingTime.Workingtime do
   schema "workingtimes" do
     field :end, :naive_datetime
     field :start, :naive_datetime
-    field :user_id, :id
+    #field :user_id, :id
+    belongs_to :user, Backend.Users.User
 
     timestamps()
   end

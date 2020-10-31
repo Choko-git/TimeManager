@@ -12,10 +12,9 @@ defmodule BackendWeb.VacationController do
   end
 
   def create(conn, vacation_params) do
-    with {:ok, %Vacation{} = vacation} <- Vacations.create_vacation(vacation_params) do
+    with {:ok, %Vacation{} = vacation} <- Vacations.create_vacation(vacation_params) do      
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.vacation_path(conn, :show, vacation))
       |> render("show.json", vacation: vacation)
     end
   end

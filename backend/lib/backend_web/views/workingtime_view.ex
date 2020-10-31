@@ -10,9 +10,17 @@ defmodule BackendWeb.WorkingtimeView do
     %{data: render_one(workingtime, WorkingtimeView, "workingtime.json")}
   end
 
-  def render("workingtime.json", %{workingtime: workingtime}) do
+  def render("workingtime_bis.json", %{workingtime: workingtime}) do
     %{id: workingtime.id,
       start: workingtime.start,
       end: workingtime.end}
+  end
+
+  def render("workingtime.json", %{workingtime: workingtime}) do
+    %{id: workingtime.id,
+      start: workingtime.start,
+      end: workingtime.end,
+      user: render_one(workingtime.user, BackendWeb.UserView, "show_create.json")}
+
   end
 end

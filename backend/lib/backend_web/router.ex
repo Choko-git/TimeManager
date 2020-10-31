@@ -9,13 +9,14 @@ defmodule BackendWeb.Router do
     pipe_through :api
 
     # Routes pour Users
-    resources "/users", UserController, except: [:index]
-    get "/users", UserController, :get_users_params # team ou role.
-    get "/users", UserController, :all_users_params
+    delete "/users/:id", UserController, :delete
+    post "/users", UserController, :create
+    get "/users", UserController, :get_all_users
+    get "/users/:user_id", UserController, :get_user_teams
     put "/users/userID", UserController, :update
 
     # Routes pour WorkingTime
-    get "/workingtimes/:userID", WorkingtimeController, :get_all
+    #get "/workingtimes/:userID", WorkingtimeController, :get_all
     get "/workingtimes/:userID/:workingtimeID", WorkingtimeController, :get_one
     put "/workingtimes/:id", WorkingtimeController, :update
     post "/workingtimes", WorkingtimeController, :create
@@ -30,7 +31,7 @@ defmodule BackendWeb.Router do
     delete "/clocks/:id", ClockController, :delete
 
     # Routes pour Teams
-    get "/teams/:teamID", TeamController, :show
+    get "/teams/:teams_id", TeamController, :get_team_users
     post "/teams", TeamController, :create
     delete "/teams/:teamID", TeamController, :delete
     put "/teams", TeamController, :update
@@ -38,15 +39,16 @@ defmodule BackendWeb.Router do
 
     # Routes pour Vacations
     get "/vacations/:userID", VacationController, :show
-    get "/vacations/:userID", VacationController, :get_all_vacations
+    #get "/vacations/:userID", VacationController, :get_all_vacations
     get "/vacations/:userID/:vacationID", VacationController, :get_vacation
     post "/vacations", VacationController, :create
     delete "/vacations/:id", VacationController, :delete
     put "/vacations/:id", VacationController, :update
 
     # Routes pour belongs // Utilisateurs -> Team
-    get "/belongs", BelongController, :get_belong_info
-    post "/belongs/:teams_id/:user_id", BelongController, :create
+    get "/belongs", BelongController, :index
+    post "/belongs/:team_id/:user_id", BelongController, :create
+    delete "/belongs/:id", BelongController, :delete
   end
 
   # Enables LiveDashboard only for development
