@@ -5,7 +5,6 @@ defmodule Backend.Belongs.Belong do
   schema "belongs" do
     field :teams_id, :id
     field :user_id, :id
-
     timestamps()
   end
 

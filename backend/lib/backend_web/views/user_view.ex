@@ -14,7 +14,6 @@ defmodule BackendWeb.UserView do
     %{id: user.id,
       username: user.username,
       email: user.email,
-      password: user.password,
       right_active: user.right_active,
       role: user.role}
   end
