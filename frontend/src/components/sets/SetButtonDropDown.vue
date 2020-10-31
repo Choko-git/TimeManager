@@ -1,5 +1,5 @@
 <template>
-  <div id="set-button-dropdown">
+  <div class="set-button-dropdown">
     <component
       :is="Button"
       v-on:mouseEvent="activeDropDown($event)"
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="scss">
-#set-button-dropdown {
+.set-button-dropdown {
   display: flex;
   justify-content: center;
   position: relative;
