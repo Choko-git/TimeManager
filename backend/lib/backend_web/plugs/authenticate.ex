@@ -7,8 +7,7 @@ defmodule Backend.Plugs.Authenticate do
   end
 
   def call(conn, _) do
-    if conn.request_path !== "/api/users/log_in" do
-      IO.inspect(conn)
+    if conn.request_path !== "/api/users/log_in" && conn.request_path !== "/api/users" do
       authorization = List.keyfind(conn.req_headers, "authorization", 0)
       token = Enum.at(String.split(elem(authorization, 1)), 1)
       result = validate_token(token)
@@ -37,20 +36,33 @@ defmodule Backend.Plugs.Authenticate do
 
   def assign_user(token) do
     {:ok, claims} = BootstrapAuthentication.Token.verify_and_validate(token)
-    checkDate = Date.compare(DateTime.utc_now(), claims["expiresAt"])
 
     case claims do
       nil ->
         :invalid_token
 
       _ ->
-        user = %{
-          "user_id" => claims["user_id"],
-          "role" => claims["role"],
-          "expiresAt" => claims["expiresAt"]
-        }
+        dateArray = String.split(claims["expiresAt"], "-")
+        {:ok, date} =
+          Date.new(
+            String.to_integer(Enum.at(dateArray, 0)),
+            String.to_integer(Enum.at(dateArray, 1)),
+            String.to_integer(Enum.at(dateArray, 2))
+          )
+        checkDate = Date.compare(Date.utc_today(), date)
+        case checkDate do
+          :gt ->
+            :invalid_token
 
-        {:authenticated, user}
+          :lt ->
+            user = %{
+              "user_id" => claims["user_id"],
+              "role" => claims["role"],
+              "expiresAt" => claims["expiresAt"]
+            }
+
+            {:authenticated, user}
+        end
     end
   end
 end
