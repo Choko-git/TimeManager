@@ -23,10 +23,9 @@ global.jQuery = jQuery
 
 export default {
   data: function() {
-    var co = "On gogogl";
     return {
     donutData: [
-      { label: co, value: 300},
+      { label: 'On work', value: 100},
       { label: 'Off work', value: 50},
     ],
     info: null
@@ -34,9 +33,8 @@ export default {
   },
   mounted () {
     axios
-      //.get('http://localhost:4000/api/users')
       .get('http://localhost:4000/api/users')
-      .then(response => (this.info = response))
+      .then(response => (this.info = response.data))
   },
   components: { DonutChart }
 }
