@@ -13,6 +13,7 @@ defmodule BackendWeb.Router do
     # Routes pour Users
     resources "/users", UserController, except: [:index]
     post "/users/log_in", UserController, :log_in
+    get "/users/log_in/token", UserController, :log_in_with_token
     get "/users", UserController, :get_users_params # team ou role.
     put "/users/userID", UserController, :update
 
