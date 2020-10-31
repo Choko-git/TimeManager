@@ -72,9 +72,7 @@ export default {
   padding-top: 50px;
 
   & #logo {
-    display: flex;
-    width: 100%;
-    height: 120px;
+    @include flex-container;
     transition: all $sidemenu-transition;
     & img {
       margin: auto;
@@ -86,8 +84,7 @@ export default {
   & #navigation {
     margin-top: 20px;
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    @include flex-container-column  ;
     & .nav-link {
       width: 100%;
       margin-top: 10px;

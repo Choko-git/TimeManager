@@ -1,10 +1,10 @@
 <template>
-  <div id="notifications-button">
+  <div class="image-button">
     <img
       @mouseover="onMouseEvent(true)"
       @mouseleave="onMouseEvent(false)"
-      src="../../assets/icons/bell.svg"
-      alt="notifications"
+      :src="require(`@/assets/icons/${icon}.svg`)"
+      :alt="name"
     />
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
       mouseHover: false,
     };
   },
-  props: ["active"],
+  props: ["name", "icon", "active", "badge"],
   methods: {
     onMouseEvent: function (value) {
       this.$emit("mouseEvent", value);
@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss">
-#notifications-button {
+.image-button {
   cursor: pointer;
   margin: auto 0;
   width: 30px;

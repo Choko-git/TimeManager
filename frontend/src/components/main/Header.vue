@@ -13,7 +13,9 @@
     <div class="header-right">
       <div id="notifications">
         <SetButtonDropDown
-          buttonType="NotificationButton"
+          buttonType="ButtonImage"
+          buttonIcon="bell"
+          buttonName="Notifications"
           dropDownType="DropDownList"
           :dropDownData="[{ name: 'No Notification' }]"
           dropDownWidth="200px"
@@ -62,8 +64,7 @@ export default {
 <style lang="scss">
 #header {
   position: relative;
-  display: flex;
-  height: 100%;
+  @include flex-container;
   padding: 0 20px;
   justify-content: space-between;
   & #header-left {

@@ -1,6 +1,6 @@
 <template>
   <button
-    id="roll-btn"
+    class="roll-btn"
     v-bind:class="{ active }"
     @mouseover="onMouseEvent(true)"
     @mouseleave="onMouseEvent(false)"
@@ -36,7 +36,7 @@ export default {
 
 
 <style lang="scss">
-#roll-btn {
+.roll-btn {
   margin: auto;
   z-index: 2;
   position: relative;
@@ -48,17 +48,15 @@ export default {
   display: flex;
   border: none;
   & .img-container {
+    @include flex-container;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     padding: 0 85px 0 10px;
     padding-left: 10px;
-    height: 100%;
-    width: 100%;
     background-color: $light-grey;
     border-radius: 100px;
     transition: 0.7s all ease;
-    display: flex;
     right: 0px;
     & img {
       animation: spin 5s ease;

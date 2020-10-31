@@ -39,8 +39,7 @@ export default {
   }
   & #right {
     z-index: 1;
-    height: 100%;
-    width: 100%;
+    @include flex-container-column;
     & #top {
       width: 100%;
         @include header-format
@@ -48,8 +47,7 @@ export default {
     & #bottom {
         @include template-format;
         & #template {
-          height: 100%;
-          display: flex;
+          @include flex-container-column;
         }
     }
   }
