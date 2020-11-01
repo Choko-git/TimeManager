@@ -27,7 +27,7 @@
           buttonIcon="settings"
           buttonName="Settings"
           dropDownType="DropDownList"
-          :dropDownData="[{ name: 'Log Out', icon: 'sign-out', method: null }]"
+          :dropDownData="[{ name: 'Log Out', icon: 'sign-out', method: logOutAndRedirect }]"
           dropDownWidth="120px"
         />
       </div>
@@ -40,6 +40,7 @@
 import { mapState } from "vuex";
 import SetButtonDropDown from "../../components/sets/SetButtonDropDown";
 import moment from "moment";
+import { logOutAndRedirect } from "@/modules/auth-manager";
 
 export default {
   data: function () {
@@ -53,11 +54,7 @@ export default {
   computed: mapState({
     user: (state) => (state.auth.isAuth ? state.auth.user : null),
   }),
-  methods: {
-    logOut: function () {
-      console.log("okokok");
-    },
-  },
+  methods: { logOutAndRedirect },
 };
 </script>
 

@@ -1,3 +1,3 @@
-defmodule BootstrapAuthentication.Token do
+defmodule Backend.Token do
   use Joken.Config
 end

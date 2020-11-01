@@ -35,7 +35,7 @@ defmodule Backend.Plugs.Authenticate do
   end
 
   def assign_user(token) do
-    {:ok, claims} = BootstrapAuthentication.Token.verify_and_validate(token)
+    {:ok, claims} = Backend.Token.verify_and_validate(token)
 
     case claims do
       nil ->

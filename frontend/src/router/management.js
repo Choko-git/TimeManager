@@ -7,8 +7,7 @@ import Teams from '../views/management/Teams.vue';
 const routes = [
     {
         path: '/management',
-        name: 'Dashboard',
-        component: Dashboard
+        redirect: '/management/dashboard',
     },
     {
         path: '/management/dashboard',
@@ -33,7 +32,7 @@ const routes = [
     {
         path: '/management/teams',
         name: 'Teams',
-        component: Teams 
+        component: Teams
     },
 ]
 

@@ -49,10 +49,10 @@ defmodule BackendWeb.UserController do
       |> Date.add(30)
     # csrf = get_csrf_token()
     extra_claims = %{"user_id" => user.id, "role" => user.role, "expiresAt" => date}
-    token = BootstrapAuthentication.Token.generate_and_sign!(extra_claims)
+    token = Backend.Token.generate_and_sign!(extra_claims)
     render(conn, "sign.json", %{token: token, user: user})
     # conn
-    # |> Plug.Conn.put_resp_cookie("token", token, http_only: false, secure: false, max_age: 604_800)
+    # |> Plug.Conn.put_resp_cookie("token", token, http_only: true, secure: false, max_age: 604_800)
     # |> text(1)
   end
 
