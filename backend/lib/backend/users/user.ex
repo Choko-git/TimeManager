@@ -12,7 +12,9 @@ defmodule Backend.Users.User do
     many_to_many :teams, Backend.Teams.Team, join_through: "belongs"
     has_many :workingtimes, Backend.WorkingTime.Workingtime
     has_many :vacations, Backend.Vacations.Vacation
-     
+    has_many :employees, Backend.Users.User, foreign_key: :surpervisor_id
+    # belongs_to :surpervisor, Backend.Users.User
+
     timestamps()
   end
 

@@ -7,7 +7,7 @@ defmodule Backend.Vacations.Vacation do
     field :end, :naive_datetime
     field :seen, :boolean, default: false
     field :start, :naive_datetime
-   # field :user_id, :id
+    # field :user_id, :id
     belongs_to :user , Backend.Users.User
     timestamps()
   end
