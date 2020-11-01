@@ -33,14 +33,12 @@ export default {
     margin: 0;
     & .loader {
       display: inline-block;
-      width: 25px;
-      height: 25px;
+      @include square(25px);
       margin: auto;
       &:after {
         content: "";
         display: block;
-        width: 25px;
-        height: 25px;
+        @include square(25px);
         border-radius: 100px;
         border: 2px solid;
         border-color: $main-color-3 transparent;

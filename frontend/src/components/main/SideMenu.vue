@@ -3,10 +3,8 @@
     id="sidemenu"
     v-bind:class="{ mainSidemenuPushed: managementOpen }"
     class="noselect"
-  >
-    <div id="logo">
-      <img src="../../assets/logo.svg" alt="homepage" />
-    </div>
+  > 
+    <Logo />
     <div id="navigation">
       <div id="main-nav">
         <nav v-for="category in navRoutes" v-bind:key="category.name">
@@ -45,6 +43,7 @@
 
 <script>
 import { navRoutes, managementNavRoutes } from "./nav-elements";
+import Logo from '@/components/Logo';
 
 export default {
   data: function () {
@@ -57,6 +56,7 @@ export default {
   created: function () {
     this.setManagementOpen(this.$route.fullPath);
   },
+  components : { Logo },
   watch: {
     $route(to) {
       console.log(to);
@@ -78,18 +78,7 @@ export default {
 <style lang="scss">
 #sidemenu {
   position: relative;
-  padding-top: 50px;
-
-  & #logo {
-    @include flex-container;
-    transition: all $sidemenu-transition;
-    & img {
-      margin: auto;
-      width: 120px;
-      height: 120px;
-      transition: all $sidemenu-transition;
-    }
-  }
+  padding-top: 35px;
   & #navigation {
     margin-top: 20px;
     padding: 0;
@@ -183,14 +172,8 @@ export default {
     }
   }
   &.mainSidemenuPushed {
-    & #logo {
-      display: flex;
-      max-width: 100%;
-      height: auto;
-      width: 80px;
-      & img {
-        width: 60px;
-      }
+    & #logo{
+      opacity: 0;
     }
     & #navigation {
       & #main-nav {
