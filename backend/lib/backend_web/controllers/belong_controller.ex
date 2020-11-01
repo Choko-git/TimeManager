@@ -11,11 +11,10 @@ defmodule BackendWeb.BelongController do
     render(conn, "index.json", belongs: belongs)
   end
 
-  def create(conn, %{"belong" => belong_params}) do
+  def create(conn,belong_params) do
     with {:ok, %Belong{} = belong} <- Belongs.create_belong(belong_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.belong_path(conn, :show, belong))
       |> render("show.json", belong: belong)
     end
   end
@@ -35,9 +34,13 @@ defmodule BackendWeb.BelongController do
 
   def delete(conn, %{"id" => id}) do
     belong = Belongs.get_belong!(id)
-
     with {:ok, %Belong{}} <- Belongs.delete_belong(belong) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def get_belong_info(conn, params) do
+    belongs = Belongs.get_info(params)
+    render(conn, "index.json", belongs: belongs)
   end
 end

@@ -121,6 +121,16 @@ defmodule Backend.Users do
     |> Repo.all()
   end
 
+   def get_user_with_teams!(id) do
+     from(user_team in User,where: user_team.id == ^id["user_id"], preload: [:teams], preload: [:vacations], preload: [:workingtimes])
+     |>Repo.one()
+   end
+
+   def get_users_with_teams!() do
+     from(users_teams in User, preload: [:teams], preload: [:vacations], preload: [:workingtimes])
+     |>Repo.all()
+   end
+
   def get_by_email(user) do
     from(u in User,
       where: u.email == ^user["email"],

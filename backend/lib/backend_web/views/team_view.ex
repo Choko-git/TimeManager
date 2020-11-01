@@ -10,8 +10,17 @@ defmodule BackendWeb.TeamView do
     %{data: render_one(team, TeamView, "team.json")}
   end
 
+  def render("show_create.json", %{team: team}) do
+    %{id: team.id,
+      name: team.name
+      }
+  end
+
   def render("team.json", %{team: team}) do
     %{id: team.id,
-      name: team.name}
+      name: team.name,
+      users: render_many(team.users, BackendWeb.UserView, "show_create.json")
+      }
   end
+
 end

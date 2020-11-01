@@ -9,7 +9,10 @@ defmodule Backend.Users.User do
     field :role, :string, default: "employee"
     field :username, :string
     field :surpervisor_id, :id
-
+    many_to_many :teams, Backend.Teams.Team, join_through: "belongs"
+    has_many :workingtimes, Backend.WorkingTime.Workingtime
+    has_many :vacations, Backend.Vacations.Vacation
+     
     timestamps()
   end
 
