@@ -2,3 +2,10 @@
     height: $size;
     width: $size;
 }
+
+@mixin page{
+    height: $template-height;
+    width: $template-width;
+    background-color: #fff;
+    display: flex;
+}

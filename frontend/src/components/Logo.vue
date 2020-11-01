@@ -54,7 +54,6 @@ export default {
       this.hours.style["-webkit-transform"] =
         "translate(-50%) rotate(" + hours + "deg)";
       this.loaded = true;
-      console.log(this.loaded);
     },
   },
 };
