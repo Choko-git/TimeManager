@@ -1,0 +1,23 @@
+@mixin bgi-right-header {
+   @include bgi-right;
+   background-size: 17px;
+}
+
+@mixin bgi-left-sidemenu {
+   @include bgi-left;
+   background-size: 30px;
+}
+
+@mixin bgi-left {
+   @include bgi;
+   background-position: top 50% left 10px;
+}
+
+@mixin bgi-right {
+   @include bgi;
+   background-position: top 50% right 10px;
+}
+
+@mixin bgi {
+   background-repeat: no-repeat;
+}

@@ -3,16 +3,22 @@ defmodule BackendWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Backend.Plugs.Authenticate
+
   end
 
   scope "/api", BackendWeb do
     pipe_through :api
 
     # Routes pour Users
+    
+    #resources "/users", UserController, except: [:index]
     delete "/users/:id", UserController, :delete
     post "/users", UserController, :create
     get "/users", UserController, :get_all_users
     get "/users/:user_id", UserController, :get_user_teams
+    post "/users/log_in", UserController, :log_in
+    get "/users/log_in/token", UserController, :log_in_with_token
     put "/users/userID", UserController, :update
 
     # Routes pour WorkingTime
