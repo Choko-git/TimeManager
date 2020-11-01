@@ -39,6 +39,17 @@ defmodule Backend.Teams do
    do
     Repo.get!(Team, id)
    end
+
+   def get_team_with_users!(id) do
+     from(team_users in Team,where: team_users.id == ^id["teams_id"], preload: [:users])
+     |>Repo.one()
+   end
+
+   def get_teams_with_users!() do
+     from(team_users in Team, preload: [:users])
+     |>Repo.all()
+   end
+
   @doc """
   Creates a team.
 

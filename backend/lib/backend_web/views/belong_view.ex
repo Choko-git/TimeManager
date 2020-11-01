@@ -11,6 +11,6 @@ defmodule BackendWeb.BelongView do
   end
 
   def render("belong.json", %{belong: belong}) do
-    %{id: belong.id}
+    %{user_id: belong.user_id, team_id: belong.team_id}
   end
 end

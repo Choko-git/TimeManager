@@ -8,15 +8,15 @@ defmodule BackendWeb.TeamController do
 
   def index(conn, _params) do
     teams = Teams.list_teams()
+    |> Repo.preload(:users)
     render(conn, "index.json", teams: teams)
   end
 
   def create(conn,team_params) do
-    with {:ok, %Team{} = team} <- Teams.create_team(team_params) do
+    with {:ok, %Team{} = team} <- Teams.create_team(team_params)do    
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.team_path(conn, :show, team))
-      |> render("show.json", team: team)
+      |> render("show_create.json", team: team)
     end
   end
 
@@ -41,8 +41,13 @@ defmodule BackendWeb.TeamController do
   end
 
   def get_all_teams(conn,params) do
-    teams = Teams.list_teams()
+    teams = Teams.get_teams_with_users!()
     render(conn, "index.json", teams: teams)
+  end
+
+  def get_team_users(conn, params) do
+    team = Teams.get_team_with_users!(params)
+    render(conn, "show.json", team: team)
   end
 
 end

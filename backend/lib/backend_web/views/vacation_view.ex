@@ -10,11 +10,21 @@ defmodule BackendWeb.VacationView do
     %{data: render_one(vacation, VacationView, "vacation.json")}
   end
 
-  def render("vacation.json", %{vacation: vacation}) do
+
+  def render("vacation_bis.json", %{vacation: vacation}) do
     %{id: vacation.id,
       start: vacation.start,
       end: vacation.end,
       accepted: vacation.accepted,
       seen: vacation.seen}
+  end
+
+  def render("vacation.json", %{vacation: vacation}) do
+    %{id: vacation.id,
+      start: vacation.start,
+      end: vacation.end,
+      accepted: vacation.accepted,
+      seen: vacation.seen,
+      user: render_one(vacation.user, BackendWeb.UserView, "show_create.json")}
   end
 end
