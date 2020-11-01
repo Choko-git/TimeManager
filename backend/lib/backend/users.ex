@@ -121,6 +121,19 @@ defmodule Backend.Users do
     |> Repo.all()
   end
 
+  def get_users_of_supervisor!(userId) do
+    IO.puts("---------------------")
+    IO.puts(userId)
+    IO.puts("---------------------")
+    User
+    |> where([surpervisor_id: ^userId])
+    |> preload([:teams])
+    |> preload([:vacations])
+    |> preload([:workingtimes])
+    |> preload([:employees])
+    |> Repo.all()
+  end
+
    def get_user_with_teams!(id) do
      from(user_team in User,where: user_team.id == ^id["user_id"], preload: [:teams], preload: [:vacations], preload: [:workingtimes])
      |>Repo.one()

@@ -82,7 +82,8 @@ defmodule BackendWeb.UserController do
   #end
 
   def get_all_users(conn,params) do
-    users = Users.get_users_with_teams!()
+    userId  = conn.assigns.current_user["user_id"]
+    users = Users.get_users_of_supervisor!(userId)
     render(conn, "index.json", users: users)
   end
 

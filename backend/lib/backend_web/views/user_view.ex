@@ -25,6 +25,7 @@ defmodule BackendWeb.UserView do
       email: user.email,
       right_active: user.right_active,
       role: user.role,
+      employees: render_many(user.employees, BackendWeb.UserView, "show_create.json"),
       teams: render_many(user.teams, BackendWeb.TeamView, "show_create.json"),
       vacations: render_many(user.vacations, BackendWeb.VacationView, "vacation_bis.json"),
       workingtimes: render_many(user.workingtimes, BackendWeb.WorkingtimeView, "workingtime_bis.json")
