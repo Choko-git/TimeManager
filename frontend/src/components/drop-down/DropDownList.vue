@@ -10,7 +10,7 @@
       <li
         v-for="element of data"
         :key="element.name"
-        @click.stop="element.method || function(){}"
+        @click.stop="clickOnElement(element)"
         :style="[element.icon ? {
           backgroundImage: `url(${require(`../../assets/icons/${element.icon}.svg`)})`,
         } : '']"
@@ -28,6 +28,11 @@ export default {
     activeDropDown: function (value) {
       this.$emit("mouseEvent", value);
     },
+    clickOnElement(element){
+      if(element.method){
+        element.method();
+      }
+    }
   },
 };
 </script>

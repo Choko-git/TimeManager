@@ -66,10 +66,9 @@ export default {
   }
 
   &::before {
+    @include full-size;
     transition: 2s all;
     z-index: 2;
-    width: 100%;
-    height: 100%;
     padding-left: 40px;
     font-weight: 700;
     color: #252525;

@@ -1,5 +1,9 @@
 <template>
-  <div id="sidemenu" v-bind:class="{ mainSidemenuPushed: managementOpen }" class="noselect">
+  <div
+    id="sidemenu"
+    v-bind:class="{ mainSidemenuPushed: managementOpen }"
+    class="noselect"
+  >
     <div id="logo">
       <img src="../../assets/logo.svg" alt="homepage" />
     </div>
@@ -55,7 +59,12 @@ export default {
   },
   watch: {
     $route(to) {
+      console.log(to);
       this.setManagementOpen(to.fullPath);
+      if (to.path === '/log-in') {
+        this.managementNavRoutes = [];
+        this.navRoutes = [];
+      }
     },
   },
   methods: {
@@ -84,12 +93,11 @@ export default {
   & #navigation {
     margin-top: 20px;
     padding: 0;
-    @include flex-container-column  ;
+    @include flex-container-column;
     & .nav-link {
-      width: 100%;
-      margin-top: 10px;
-      margin-bottom: 20px;
       cursor: pointer;
+      width: 100%;
+      margin: 10px 0 20px 0;
       padding: 10px 10px 10px 50px;
       border-radius: 3px;
       font-size: 17px;
@@ -134,11 +142,11 @@ export default {
       width: 0;
       top: 0;
       right: 0;
-      display: flex;  
+      display: flex;
       flex-direction: column;
       & * {
         opacity: 0;
-         transition: opacity $sidemenu-transition;
+        transition: opacity $sidemenu-transition;
       }
       &.navActive {
         width: 220px;
@@ -153,7 +161,7 @@ export default {
         padding: 10px;
         border-left: 8px solid #15161b81;
         background-color: #cab38d6b;
-        box-shadow: 4px 5px 10px 7  px  #474e6181;
+        box-shadow: 4px 5px 10px 7 px #474e6181;
         width: 210px;
         margin-left: 10px;
       }
