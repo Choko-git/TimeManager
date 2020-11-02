@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     timer: function () {
-      const now = new Date();
+      const now = new Date(); 
       const minutes = (now.getMinutes() / 60) * 360;
       const hours = (now.getHours() / 12) * 360;
       this.minutes.style["-webkit-transform"] =
@@ -98,7 +98,7 @@ export default {
       transform: translate(-50%, -50%) rotate(180deg);
       @include square(85px);
       background-color: $logo-clock-bgc;
-      border: $logo-clock-border;
+      border: $logo-clock-border; 
       border-radius: 50%;
       #logo-clock-minutes,
       #logo-clock-hours {
@@ -109,19 +109,19 @@ export default {
         transform: translateY(-50%);
       }
       #logo-clock-minutes {
-        width: 5px;
+        width: $logo-clock-hand-width;
         height: 22px;
-        left: 49%;
+        left: 50%;
         border-radius: 2px;
-        background-color: $logo-clock-hand;
+        background-color: $logo-clock-hand-color;
         transform-origin: 50% 0;
       }
       #logo-clock-hours {
-        width: 5px;
+        width: $logo-clock-hand-width;
         height: 14px;
-        left: 51%;
+        left: 50%;
         border-radius: 2px;
-        background-color: $logo-clock-hand;
+        background-color: $logo-clock-hand-color;
         transform-origin: 50% 0;
       }
       & .logo-clock-border {

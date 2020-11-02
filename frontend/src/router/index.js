@@ -43,13 +43,11 @@ let router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   if (!routerLoading) {
-    console.log(to.name);
     if (!isAuth && to.name !== 'LogIn') {
       routerLoading = true;
       checkToken(next)
         .then(checked => {
           routerLoading = false;
-          console.log(checked);
           next({ name: checked ? checkPath(to.path) || 'Home' : 'LogIn' });
         });
     }

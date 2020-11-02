@@ -27,7 +27,7 @@ function checkToken() {
 
 function auth(res) {
     localStorage.setItem('token', res.data.token)
-    return store.dispatch("change", {
+    return store.dispatch("changeAuth", {
         isAuth: true,
         user: res.data.user,
     })
@@ -43,7 +43,7 @@ function logOutAndRedirect() {
 
 function logOut() {
     localStorage.removeItem('token')
-    return store.dispatch("change", {
+    return store.dispatch("changeAuth", {
         isAuth: false,
         user: null,
     })
