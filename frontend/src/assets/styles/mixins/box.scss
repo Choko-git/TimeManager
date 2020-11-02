@@ -2,3 +2,18 @@
     height: $size;
     width: $size;
 }
+
+@mixin page{
+    height: $template-height;
+    width: $template-width;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    & h1 {
+        color : $main-color-1
+    }
+    & .content {
+        width: 60%;
+        margin: 0 auto;
+    }
+}

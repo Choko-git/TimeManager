@@ -42,7 +42,6 @@ const allManagementRoutes = [
     }]
 
 function createMainRoutes(role) {
-    console.log(role);
     const mainLinks = [allMainRoutes.home];
     const isEmployee = role === 'employee';
     mainLinks.push(isEmployee ? allMainRoutes.myTeams : allMainRoutes.manage)

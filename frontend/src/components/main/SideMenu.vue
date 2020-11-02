@@ -59,11 +59,10 @@ export default {
   components : { Logo },
   watch: {
     $route(to) {
-      console.log(to);
       this.setManagementOpen(to.fullPath);
       if (to.path === '/log-in') {
-        this.managementNavRoutes = [];
-        this.navRoutes = [];
+        this.managementNavRoutes = managementNavRoutes;
+        this.navRoutes = navRoutes;
       }
     },
   },

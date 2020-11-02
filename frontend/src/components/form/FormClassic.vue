@@ -6,6 +6,7 @@
         :type="field.type"
         v-model="field.value"
         :placeholder="field.placeholder"
+        @change="checkRequiredFields"
         @keyup="checkRequiredFields"
       />
     </div>
@@ -37,7 +38,7 @@ export default {
     "formSubmitMethod",
     "formValidMethod",
     "httpMethod",
-    "apiRoute",
+    "apiRoute"
   ],
   components: {
     FormSubmit,
@@ -99,12 +100,7 @@ export default {
       margin-top: 20px;
     }
     & input {
-      width: 100%;
-      padding: 5px;
-      border: $classic-border;
-      &:focus {
-        outline: $grey-slight-border;
-      }
+      @include classic-input;
     }
   }
 }
