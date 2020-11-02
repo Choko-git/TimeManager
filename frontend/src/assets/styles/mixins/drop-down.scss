@@ -1,0 +1,43 @@
+@mixin formDropDown {
+    background-color: white;
+    padding: 2px 20px;
+    @include dropDown;
+}
+
+@mixin listDropDown {
+    background-color: $light-grey;
+    @include dropDown;
+}
+
+@mixin dropDown {
+    z-index: 2;
+    transition: all 0.1s;
+    position: absolute;
+    top: 50%;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: $grey-box-shadow;
+    pointer-events: none;
+    opacity: 0;
+    & ul {
+        list-style: none;
+        padding: 0 0 0 10px;
+        margin: 0;
+        & li {
+            transition: all 0.1s;
+            cursor: pointer;
+            color: $darker-grey;
+            border-top: $grey-slight-border;
+            padding: 7px 0;
+            @include bgi-right-header;
+            &:hover:not(.no-data) {
+                font-weight: bold;
+                opacity: 0.9;
+            }
+        }
+    }
+    &.active {
+        pointer-events: all;
+        opacity: 1;
+    }
+}

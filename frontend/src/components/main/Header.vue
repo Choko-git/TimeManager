@@ -19,6 +19,7 @@
           dropDownType="DropDownList"
           :dropDownData="[{ name: 'No Notification' }]"
           dropDownWidth="200px"
+          :dropDownMouseEvent="true"
         />
       </div>
       <div id="settings">
@@ -27,8 +28,11 @@
           buttonIcon="settings"
           buttonName="Settings"
           dropDownType="DropDownList"
-          :dropDownData="[{ name: 'Log Out', icon: 'sign-out', method: logOutAndRedirect }]"
+          :dropDownData="[
+            { name: 'Log Out', icon: 'sign-out', method: logOutAndRedirect },
+          ]"
           dropDownWidth="120px"
+          :dropDownMouseEvent="true"
         />
       </div>
     </div>

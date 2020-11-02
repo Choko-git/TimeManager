@@ -35,7 +35,6 @@ defmodule Backend.Plugs.Authenticate do
 
   def assign_user(token) do
     {:ok, claims} = Backend.Token.verify_and_validate(token)
-
     case claims do
       nil ->
         :invalid_token

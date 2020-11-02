@@ -1,6 +1,7 @@
 <template>
   <div class="autocomplete-field">
     <input
+      :ref="placeholder"
       v-bind:class="{
         placeHolderFormat: selectedData && selectedData !== 'all',
       }"
@@ -9,25 +10,34 @@
       @keyup="searchData($event.target.value)"
       @keypress="onKeyPressed"
       @focus="isFocus = true"
-      @blur="isFocus = true"
+      @blur="focusOut"
       :placeholder="placeholder"
     />
-    <div v-if="isFocus && dropDown" class="contain-dropdown-list">
+    <div
+      v-if="isFocus && dropDown && inputTyped"
+      class="contain-dropdown-list"
+      @click="clickOnDropDown"
+    >
       <ul class="dropdown-list">
-        <div v-if="queryOk">
-          <div v-if="dataToSelect && dataToSelect.length > 0">
-            <li class="li-head">Select a user</li>
+        <div v-if="queryOk" class="data-list">
+          <div
+            v-if="field.dataToSelect && field.dataToSelect.length > 0"
+            class="data-list"
+          >
             <li
-              v-for="data of dataToSelect"
+              v-for="data of field.dataToSelect"
               v-bind:key="data.username"
               @click="onSelectData(data)"
               class="li-link"
             >
-              <div>{{ data[keyToShow] }}</div>
+              <label>{{ data[keyToShow] }}</label>
             </li>
           </div>
-          <li v-else-if="dataToSelect && !dataToSelect.length">
-            No user found
+          <li
+            v-else-if="field.dataToSelect && !field.dataToSelect.length"
+            class="no-data"
+          >
+            {{ noDataText }}
           </li>
         </div>
         <div v-else>
@@ -48,26 +58,34 @@ export default {
       typingTimer: null,
       keyPressed: null,
       isFocus: false,
+      inputTyped: false,
+      queryOk: true,
+      dropDownClicked: false,
     };
   },
-  props: [
-    "placeholder",
-    "noDataText",
-    "dataToSelect",
-    "keyToShow",
-    "queryOk",
-    "dropDown",
-  ],
+  props: ["placeholder", "noDataText", "field", "keyToShow", "dropDown"],
   methods: {
+    focusOut: function () {
+      setTimeout(() => {
+        if (this.dropDownClicked) {
+          this.dropDownClicked = false;
+        } else {
+          this.isFocus = true;
+        }
+      }, 300);
+    },
     searchData: function (value) {
+      this.inputTyped = value.trim() !== "";
+      this.queryOk = false;
       this.keyPressed = false;
       clearTimeout(this.typingTimer);
       this.typingTimer = setTimeout(() => {
         if (!this.keyPressed) {
           value = value.toLowerCase().trim();
           this.$emit("searchData", value);
+          this.queryOk = true;
         }
-      }, 0);
+      }, 350);
     },
 
     enterInput: function () {
@@ -89,7 +107,14 @@ export default {
     },
 
     onSelectData(data) {
+      console.log(2);
+      this.dropDownClicked = true;
+      this.$refs[this.placeholder].value = data[this.keyToShow];
       this.$emit("dataSelected", data);
+      setTimeout(() => (this.isFocus = false), 100);
+    },
+    clickOnDropDown() {
+      this.dropDownClicked = true;
     },
   },
 };
@@ -99,6 +124,7 @@ export default {
 .autocomplete-field {
   & input {
     @include classic-input;
+    margin-top: 0 !important;
     &.placeHolderFormat {
       &.uppercase::placeholder {
         text-transform: uppercase;
@@ -112,6 +138,7 @@ export default {
   }
   & .contain-dropdown-list {
     position: relative;
+    margin: 0 !important;
     .dropdown-list {
       box-shadow: 0px 0 10px 0 rgba(92, 92, 92, 0.2);
       background-color: rgb(248, 248, 248);
@@ -123,10 +150,8 @@ export default {
       border-radius: 5px;
       position: absolute;
       padding: 0;
-      & .li-head {
-        text-decoration: underline;
-        padding-bottom: 2px;
-        font-weight: bold;
+      & .data-list {
+        margin: 0;
       }
       & li {
         transition: all 0.2s;
@@ -134,22 +159,21 @@ export default {
         font-size: 15px;
         color: rgb(82, 82, 82);
         line-height: 1.67;
-        padding: 5px 10px;
         padding-left: 20px;
+        margin: 0;
         display: flex;
-      }
-      & .li-link:hover {
-        color: rgb(85, 85, 85);
-        font-weight: 800;
-        opacity: 0.8;
+        & label {
+          cursor: pointer;
+          margin: 0;
+        }
       }
       & .loader {
+        border : none;
         display: flex;
         width: 20px;
         height: 20px;
-        margin-top: 5px;
         margin: auto;
-        padding: 10px 0 !important;
+        padding: 0px 0 !important;
         margin-bottom: 20px;
         &:after {
           content: "";
