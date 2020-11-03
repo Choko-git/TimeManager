@@ -58,7 +58,7 @@ export default {
     }
   },
   computed: {
-    Button() {
+    Button() {  
       return () => import(`../../components/button/${this.buttonType}`);
     },
     DropDown() {
@@ -71,8 +71,8 @@ export default {
     },
     activeDropDown: function (value = null) {
       if (this.dropDownEvent === "click") {
-        this.dropDownActive = !this.dropDownActive;
-      } else {
+          this.dropDownActive = !this.dropDownActive;
+        } else {
         this.mouseOnDropDown = value;
         if (value) this.dropDownActive = value;
         else {

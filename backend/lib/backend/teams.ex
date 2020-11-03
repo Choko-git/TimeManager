@@ -42,6 +42,12 @@ defmodule Backend.Teams do
     |> Repo.all
    end
 
+   def get_team_before_delete!(id) do
+    Team
+    |> where([id: ^id])
+    |> Repo.one
+   end
+
    def get_team_with_users!(id) do
      from(team_users in Team,where: team_users.id == ^id["teams_id"], preload: [:users])
      |>Repo.one()
@@ -100,7 +106,7 @@ defmodule Backend.Teams do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_team(%Team{} = team) do
+  def delete_team(team) do
     Repo.delete(team)
   end
 

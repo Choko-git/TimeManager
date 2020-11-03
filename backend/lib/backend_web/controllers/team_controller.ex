@@ -31,9 +31,9 @@ defmodule BackendWeb.TeamController do
     end
   end
 
-  def delete(conn, %{"teamID" => id}) do
-    team = Teams.get_team!(id)
-
+  def delete(conn, params) do
+    team = Teams.get_team_before_delete!(params["teamID"])
+    Backend.Belongs.delete_by_team(params)
     with {:ok, %Team{}} <- Teams.delete_team(team) do
       send_resp(conn, :no_content, "")
     end

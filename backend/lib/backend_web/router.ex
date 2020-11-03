@@ -16,6 +16,7 @@ defmodule BackendWeb.Router do
     delete "/users/:id", UserController, :delete
     post "/users", UserController, :create
     get "/users", UserController, :get_all_users
+    get "/users/get/me", UserController, :get_me
     get "/users/:user_id", UserController, :get_user_teams
     post "/users/log_in", UserController, :log_in
     get "/users/log_in/token", UserController, :log_in_with_token

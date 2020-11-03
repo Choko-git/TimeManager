@@ -1,4 +1,3 @@
-
 # Use an official Elixir runtime as a parent image
 FROM elixir:latest
 

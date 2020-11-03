@@ -100,10 +100,9 @@ export default {
     SetButtonDropDown,
   },
   created: function () {
-    const allData = this.$store.state.data;
-    console.log(allData);
+    const allEmployees = this.$store.state.data?.employees;
     this.employeesData = [];
-    this.flattenEmployees(this.employeesData, allData);
+    this.flattenEmployees(this.employeesData, allEmployees);
     this.setWholeTable();
   },
   computed: mapState({
@@ -111,9 +110,10 @@ export default {
   }),
   watch: {
     "$store.state.data": function (data) {
-      const allData = data;
+      console.log(data);
+      const allEmployees = data?.employees;
       this.employeesData = [];
-      this.flattenEmployees(this.employeesData, allData);
+      this.flattenEmployees(this.employeesData, allEmployees);
       this.setWholeTable();
     },
   },
@@ -199,16 +199,14 @@ export default {
       }
     },
     formatRow: function (employee) {
-      this.employeesListData.push(
-        {
-          id: employee.id,
-          rows: [
-            { class: "status status-present" },
-            { value: employee.username },
-            { value: this.formatRolesOrTeams(employee) },
-          ],
-        },
-      );
+      this.employeesListData.push({
+        id: employee.id,
+        rows: [
+          { class: "status status-present" },
+          { value: employee.username },
+          { value: this.formatRolesOrTeams(employee) },
+        ],
+      });
     },
     formatRolesOrTeams: function (employee) {
       if (this.role === "admin") {
