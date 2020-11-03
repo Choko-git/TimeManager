@@ -13,6 +13,7 @@ defmodule Backend.Users.User do
     has_many :workingtimes, Backend.WorkingTime.Workingtime
     has_many :vacations, Backend.Vacations.Vacation
     has_many :employees, Backend.Users.User, foreign_key: :surpervisor_id
+    has_many :clocks, Backend.Clocks.Clock
 
     timestamps()
   end
