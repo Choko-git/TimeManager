@@ -5,13 +5,18 @@
     padding: 10px;
     border: $classic-border;
     border-radius: 5px;
+    background-color: #fff;
     &:focus {
         outline: none;
         border-color: $grey-opacity-25;
+    }
+    &:disabled {
+        background-color: $light-grey;
+        opacity: 0.9;
     }
 }
 
 @mixin classic-select-input {
     @include classic-input;
-    height: auto
+    height: auto;
 }

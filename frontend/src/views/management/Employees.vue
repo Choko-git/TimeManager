@@ -46,7 +46,8 @@
           dropDownWidth="300px"
           :dropDownHeight="role === 'admin' ? '410px' : '250px'"
           :formSubmitMethod="beforeCreated"
-          :formValidMethod="() => {}"
+          :formValidMethod="employeeCreated"
+
         />
       </div>
 
@@ -83,6 +84,7 @@ import ListClassic from "@/components/list/ListClassic";
 import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
 import { mapState } from "vuex";
+import store from "@/store";
 
 export default {
   data: () => ({
@@ -100,24 +102,38 @@ export default {
     SetButtonDropDown,
   },
   created: function () {
-    const allEmployees = this.$store.state.data?.employees;
-    this.employeesData = [];
-    this.flattenEmployees(this.employeesData, allEmployees);
-    this.setWholeTable();
+    this.initData();
   },
   computed: mapState({
     role: (state) => (state.auth.isAuth ? state.auth.user.role : null),
   }),
   watch: {
-    "$store.state.data": function (data) {
-      console.log(data);
-      const allEmployees = data?.employees;
+    "$store.state.data": function () {
+      this.initData();
+    },
+  },
+  methods: {
+    initData() {
+      const allEmployees = this.$store.state.data?.employees;
       this.employeesData = [];
       this.flattenEmployees(this.employeesData, allEmployees);
       this.setWholeTable();
     },
-  },
-  methods: {
+    employeeCreated(data) {
+      const user = data.data;
+      const me = this.$store.state.data;
+      if (user.surpervisor_id === me.id) {
+        me.employees.push(user);
+      } else {
+        me.employees = me.employees.data((manager) => {
+          if (manager.id === user.id) {
+            manager.employees.push(user);
+          }
+        });
+      }
+      store.dispatch("changeData", me);
+      this.initData();
+    },
     goToEmployeePage(employee) {
       console.log(employee);
     },
@@ -130,16 +146,16 @@ export default {
     searchManager: function (value) {
       if (value) {
         const regExp = new RegExp(
-          value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+          value?.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
         );
         return this.employeesData.filter((_) => {
-          return _.role === "manager" && regExp.test(_.username.toLowerCase());
+          return _.role === "manager" && regExp.test(_.username?.toLowerCase());
         });
       } else return [];
     },
     addRegExp: function (value) {
       this.regExp = new RegExp(
-        value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+        value?.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
       );
       this.searchUsers();
     },
@@ -149,7 +165,6 @@ export default {
       this.employeesListData = this.employeesListData.sort((a, b) => {
         return this.sortList(a, b);
       });
-      console.log(this.employeesListData);
     },
     filterFlatData: function () {
       return this.employeesData.filter((_) => {
@@ -167,7 +182,7 @@ export default {
       }
     },
     checkRegExp: function (value) {
-      return this.regExp ? this.regExp?.test(value.toLowerCase()) : true;
+      return this.regExp ? this.regExp?.test(value?.toLowerCase()) : true;
     },
     selectUser: function () {},
     setWholeTable: function () {
@@ -221,7 +236,6 @@ export default {
       return "Alpha";
     },
     sortEvent: function (column) {
-      console.log(column);
       if (this.sortIndex === column.sortIndex) {
         this.sortOrder = this.sortOrder * -1;
       } else {
@@ -231,8 +245,8 @@ export default {
       this.searchUsers();
     },
     sortList: function (a, b) {
-      a = a.rows[this.sortIndex].value.toLowerCase();
-      b = b.rows[this.sortIndex].value.toLowerCase();
+      a = a.rows[this.sortIndex].value?.toLowerCase();
+      b = b.rows[this.sortIndex].value?.toLowerCase();
       return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
     },
     formatClocks: function (clocks) {

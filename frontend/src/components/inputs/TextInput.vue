@@ -17,6 +17,9 @@ export default {
   data: () => ({
     focusIn: false,
   }),
+  created: ()=> {
+    console.log('ojoj');
+  },
   props: ["field", "changeMethod"],
   methods: {
     changeFocus(value){

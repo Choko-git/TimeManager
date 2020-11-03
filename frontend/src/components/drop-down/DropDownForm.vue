@@ -12,6 +12,7 @@
       :httpMethod="httpMethod"
       :apiRoute="apiRoute"
       :fields="fields"
+      @closeForm="closeDropDown"
     />
   </div>
 </template>
@@ -36,6 +37,9 @@ export default {
     "formValidMethod"
   ],
   methods: {
+    closeDropDown: function(){
+      this.$emit("close-dropdown")
+    },
     activeDropDown: function () {
       if (this.mouseEvent) {
         this.$emit("mouse-event");

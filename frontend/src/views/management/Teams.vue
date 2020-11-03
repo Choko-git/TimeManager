@@ -20,15 +20,30 @@
               noDataText: 'No user found',
               dataToSelect: [],
               searchData: searchManager,
-              if: (data) => this.role === 'admin',
+              notHere: role !== 'admin',
+              change: managerSelected
+            },
+            {
+              name: 'user_ids',
+              placeholder: 'Choose employees',
+              type: 'autoComplete',
+              noDataText: 'No user found',
+              dataToSelect: [],
+              array: true,
+              searchData: searchEmployee,
+              disabled: (role === 'admin' && !selectedManager.id),
+              listValue: selectedEmployees,
+              listKey: 'username',
+              change: employeeSelected,
+              deleteMethod: employeeDeleted
             },
           ]"
           dropDownFormHttpMethod="post"
           dropDownFormApiRoute="/users"
           dropDownWidth="300px"
-          :dropDownHeight="role === 'admin' ? '410px' : '250px'"
+          :dropDownHeight="role === 'admin' ? '350px' : '210px'"
           :formSubmitMethod="beforeCreated"
-          :formValidMethod="() => {}"
+          :formValidMethod="teamCreated"
         />
       </div>
 
@@ -68,10 +83,13 @@ import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
 export default {
   data: () => ({
     teamsData: [],
+    managersData: [],
     listColumns: null,
     sortIndex: 1,
     sortOrder: 1,
     regExp: null,
+    selectedManager: {},
+    selectedEmployees: [],
   }),
   components: {
     ListClassic,
@@ -80,6 +98,7 @@ export default {
   created: function () {
     this.setColumns();
     this.setTeamsData(this.$store.state.data);
+    this.setEmployeesData(this.$store.state.data);
   },
   computed: mapState({
     role: (state) => (state.auth.isAuth ? state.auth.user.role : null),
@@ -87,23 +106,82 @@ export default {
   watch: {
     "$store.state.data": function (data) {
       this.setTeamsData(data);
+      this.setEmployeesData(data);
     },
   },
   methods: {
-    beforeCreated(data) {
-      if (data.role === "manager") {
-        data.surpervisor_id = null;
+    managerSelected(field) {
+      this.selectedEmployees.length = 0;
+      this.selectedManager.id = field.value;
+      console.log(this.selectedManager);
+      // this.$forceUpdate();
+    },
+    employeeSelected(field) {
+      this.selectedEmployees.push(
+        this.employeesData.find((_) => _.id === field.value)
+      );
+    },
+    employeeDeleted(data){
+      const index = this.selectedEmployees.findIndex( _ => _ === data);
+      this.selectedEmployees.splice(index, 1);
+    },
+    setEmployeesData(data) {
+      if (this.role === "admin") {
+        this.managersData = data?.employees;
+        this.employeesData = [];
+        this.managersData?.forEach((manager) => {
+          this.employeesData.push(...manager?.employees);
+        });
+      } else {
+        this.employeesData = data?.employees;
       }
-      return data;
+    },
+    teamCreated(data) {
+      console.log(data);
+      // const user = data.data;
+      // const me = this.$store.state.data;
+      // if (user.surpervisor_id === me.id) {
+      //   me.employees.push(user);
+      // } else {
+      //   me.employees = me.employees.data((manager) => {
+      //     if (manager.id === user.id) {
+      //       manager.employees.push(user);
+      //     }
+      //   });
+      // }
+      // store.dispatch("changeData", me);
+      // this.initData();
+    },
+    beforeCreated(data) {
+      console.log(data);
+    },
+    createRegExp(value) {
+      return new RegExp(
+        value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+      );
+    },
+    filterWithRegexp(regExp, array, condition = () => true) {
+      return array
+        .filter((_) => {
+          return condition(_) && regExp.test(_.username.toLowerCase());
+        })
+        .splice(0, 10);
+    },
+    searchEmployee(value) {
+      if (value) {
+        const regExp = this.createRegExp(value);
+        return this.filterWithRegexp(regExp, this.employeesData, (data) => {
+          return (
+            this.selectedEmployees.findIndex((_) => _ === data) === -1 &&
+            data["surpervisor_id"] === this.selectedManager.id
+          );
+        });
+      } else return [];
     },
     searchManager: function (value) {
       if (value) {
-        const regExp = new RegExp(
-          value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
-        );
-        return this.employeesData.filter((_) => {
-          return _.role === "manager" && regExp.test(_.username.toLowerCase());
-        });
+        const regExp = this.createRegExp(value);
+        return this.filterWithRegexp(regExp, this.managersData);
       } else return [];
     },
     goToTeamPage(data) {
@@ -138,14 +216,14 @@ export default {
     },
     setTeamsByManager(data) {
       this.teamsData.length = 0;
-      data?.forEach((manager) => {
+      data?.employees?.forEach((manager) => {
         manager.employees?.forEach((employee) => {
           this.checkEmployeeTeams(employee, manager);
         });
       });
     },
     setTeams(data) {
-      data?.forEach((employee) => {
+      data?.employees?.forEach((employee) => {
         this.checkEmployeeTeams(employee);
       });
     },
@@ -174,7 +252,7 @@ export default {
 <style lang="scss">
 #teams {
   @include page;
-  & #create-employee {
+  & #create-team {
     display: flex;
     margin: 30px 0 60px 0;
   }

@@ -1,7 +1,11 @@
 <template>
   <form class="classic-form" @submit.prevent="submitForm">
     <div class="form-field" v-for="field of fields" :key="field.name">
-      <div class="m-0" :class="{ hidden: field.if && !field.display }">
+      <div
+        v-if="!field.notHere"
+        class="m-0"
+        :class="{ hidden: field.if && !field.display }"
+      >
         <label v-if="field.label">{{ field.label }}</label>
         <TextInput
           v-if="!['select', 'autoComplete'].includes(field.type)"
@@ -19,6 +23,7 @@
           :placeholder="field.placeholder"
           keyToShow="username"
           :dropDown="true"
+          :array="field.array"
           :noDataText="field.noDataText"
           @searchData="searchData($event, field)"
           @dataSelected="selectData($event, field)"
@@ -41,7 +46,7 @@ import SelectInput from "@/components/inputs/SelectInput";
 import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 import errorHandler from "@/modules/error-handler";
 import { checkText, checkEmail } from "@/modules/field-checker";
-import { apiUrl } from '@/env-config';
+import { apiUrl } from "@/env-config";
 import axios from "axios";
 
 export default {
@@ -65,6 +70,7 @@ export default {
     AutoCompleteInput,
   },
   created: function () {
+    console.log('ojojojojoojo');
     this.fields.forEach((_) => {
       _.required = _.required === false ? false : true;
       _.checkFieldMethod =
@@ -80,6 +86,9 @@ export default {
     },
     selectData(event, field) {
       field.value = event.id;
+      if(field.change){
+        field.change(field);
+      }
       this.checkRequiredFields();
     },
     getCheckFieldFromType(type) {
@@ -94,12 +103,13 @@ export default {
     },
     fieldChange() {
       this.fields.forEach((field) => {
+        console.log(field);
         if (field.if) {
           field.display = field.if(this.fields);
+          console.log(field);
         }
       });
       this.checkRequiredFields();
-      this.$forceUpdate();
     },
     checkRequiredFields() {
       this.buttonDisabled =
@@ -126,7 +136,10 @@ export default {
         axios[this.httpMethod](url, formData)
           .then((res) => {
             this.formValidMethod(res);
-            setTimeout(() => (this.loading = false));
+            this.$emit("closeForm");
+            setTimeout(() => {
+              this.loading = false;
+            });
           })
           .catch((err) => {
             this.loading = false;
