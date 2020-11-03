@@ -17,6 +17,7 @@ import { DonutChart } from 'vue-morris';
 import Raphael from 'raphael/raphael';
 import jQuery from 'jquery';
 import axios from 'axios';
+import { apiUrl } from '@/env-config';
 
 global.Raphael = Raphael
 global.jQuery = jQuery
@@ -33,7 +34,7 @@ export default {
   },
   mounted () {
     axios
-      .get('http://localhost:4000/api/users')
+      .get(`${apiUrl}/users`)
       .then(response => (this.info = response.data))
   },
   components: { DonutChart }
