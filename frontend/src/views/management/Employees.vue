@@ -66,6 +66,11 @@
           @invert="invertList($event)"
           noDataText="You have no employee yet"
           noResultText="No employee found"
+          :lastColumnButton="{
+            type: 'arrow',
+            method: goToEmployeePage,
+            allLine: true,
+          }"
         />
       </div>
     </div>
@@ -95,30 +100,32 @@ export default {
     SetButtonDropDown,
   },
   created: function () {
-    const allData = this.$store.state.data?.data;
+    const allData = this.$store.state.data;
+    console.log(allData);
     this.employeesData = [];
     this.flattenEmployees(this.employeesData, allData);
     this.setWholeTable();
-          console.log(this.employeesListData);
   },
   computed: mapState({
     role: (state) => (state.auth.isAuth ? state.auth.user.role : null),
   }),
   watch: {
-    "$store.state.data": function () {
-      const allData = this.$store.state.data?.data;
+    "$store.state.data": function (data) {
+      const allData = data;
       this.employeesData = [];
       this.flattenEmployees(this.employeesData, allData);
       this.setWholeTable();
-
     },
   },
   methods: {
-    beforeCreated(data){
-      if(data.role === 'manager'){
+    goToEmployeePage(employee) {
+      console.log(employee);
+    },
+    beforeCreated(data) {
+      if (data.role === "manager") {
         data.surpervisor_id = null;
       }
-      return data
+      return data;
     },
     searchManager: function (value) {
       if (value) {
@@ -142,6 +149,7 @@ export default {
       this.employeesListData = this.employeesListData.sort((a, b) => {
         return this.sortList(a, b);
       });
+      console.log(this.employeesListData);
     },
     filterFlatData: function () {
       return this.employeesData.filter((_) => {
@@ -191,11 +199,16 @@ export default {
       }
     },
     formatRow: function (employee) {
-      this.employeesListData.push([
-        { class: "status status-present" },
-        { value: employee.username },
-        { value: this.formatRolesOrTeams(employee) },
-      ]);
+      this.employeesListData.push(
+        {
+          id: employee.id,
+          rows: [
+            { class: "status status-present" },
+            { value: employee.username },
+            { value: this.formatRolesOrTeams(employee) },
+          ],
+        },
+      );
     },
     formatRolesOrTeams: function (employee) {
       if (this.role === "admin") {
@@ -210,6 +223,7 @@ export default {
       return "Alpha";
     },
     sortEvent: function (column) {
+      console.log(column);
       if (this.sortIndex === column.sortIndex) {
         this.sortOrder = this.sortOrder * -1;
       } else {
@@ -219,11 +233,10 @@ export default {
       this.searchUsers();
     },
     sortList: function (a, b) {
-      a = a[this.sortIndex].value.toLowerCase();
-      b = b[this.sortIndex].value.toLowerCase();
+      a = a.rows[this.sortIndex].value.toLowerCase();
+      b = b.rows[this.sortIndex].value.toLowerCase();
       return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
     },
-
     formatClocks: function (clocks) {
       const clock = clocks?.find((_) =>
         this.isSameDay(new Date(_.start), this.selectedDate)
