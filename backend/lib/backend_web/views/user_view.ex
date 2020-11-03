@@ -15,7 +15,8 @@ defmodule BackendWeb.UserView do
       username: user.username,
       email: user.email,
       role: user.role,
-      right_active: user.right_active
+      right_active: user.right_active,
+      surpervisor_id: user.surpervisor_id
       }
   end
 

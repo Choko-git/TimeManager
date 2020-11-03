@@ -14,7 +14,6 @@ defmodule BackendWeb.UserController do
   def create(conn, user_params) do
     hash = Bcrypt.add_hash(user_params["password"])
     user_params = Map.replace!(user_params, "password", hash[:password_hash])
-
     user_params =
       if !user_params["surpervisor_id"] do
         Map.replace(user_params, "surpervisor_id", conn.assigns.current_user["user_id"])
