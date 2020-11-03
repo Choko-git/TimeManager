@@ -133,13 +133,14 @@ defmodule Backend.Users do
 
   def get_users_of_supervisor!(userId) do
     User
-    |> where([surpervisor_id: ^userId])
+    |> where([id: ^userId])
     |> preload([:teams])
     |> preload([:vacations])
     |> preload([:workingtimes])
     |> preload([:clocks])
     |> preload([:employees])
-    |> Repo.all()
+    |> preload([:clocks])
+    |> Repo.one()
   end
 
    def get_user_with_teams!(id) do
