@@ -41,7 +41,7 @@ import SelectInput from "@/components/inputs/SelectInput";
 import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 import errorHandler from "@/modules/error-handler";
 import { checkText, checkEmail } from "@/modules/field-checker";
-
+import { apiUrl } from '@/env-config';
 import axios from "axios";
 
 export default {
@@ -122,7 +122,7 @@ export default {
         if (this.formSubmitMethod) {
           formData = this.formSubmitMethod(formData);
         }
-        const url = `http://localhost:4000/api${this.apiRoute}`;
+        const url = `${apiUrl}${this.apiRoute}`;
         axios[this.httpMethod](url, formData)
           .then((res) => {
             this.formValidMethod(res);

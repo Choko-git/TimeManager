@@ -24,6 +24,7 @@
                 >▼</span
               >
             </th>
+            <th scope="col" :style="{ width: '50px' }"></th>
           </tr>
         </thead>
         <tbody>
@@ -31,13 +32,21 @@
             :key="element.name"
             v-for="element of dataToShow"
             class="table-row"
+            :class="{ lineLink: lastColumnButton.allLine }"
+            @click="clickOnRow(element.id)"
           >
             <td
-              v-for="column of element"
+              v-for="column of element.rows"
               :key="column.value"
               :class="column.class"
             >
               {{ column.value }}
+            </td>
+            <td v-if="lastColumnButton.type === 'arrow'" class="list-button">
+              <div class="arrow"></div>
+            </td>
+            <td v-if="lastColumnButton.type === 'button'" class="list-button">
+              <div class=""></div>
             </td>
           </tr>
         </tbody>
@@ -62,12 +71,12 @@ export default {
     dataToShow: null,
     noData: true,
   }),
-  props: ["data", "columns", "noDataText", "noResultText"],
+  props: ["data", "columns", "noDataText", "noResultText", "lastColumnButton"],
   created: function () {
     if (this.data) {
       this.noData = false;
       this.setDataToShow();
-    } 
+    }
   },
   components: {
     Pager,
@@ -78,6 +87,11 @@ export default {
     },
   },
   methods: {
+    clickOnRow(row){
+      if(this.lastColumnButton.allLine){
+        console.log(row);
+      }
+    },
     setDataToShow() {
       this.dataToShow = [];
       let current = (this.page - 1) * this.totalPerPage;
@@ -135,7 +149,6 @@ export default {
           background-repeat: no-repeat;
           background-position: right;
           & th {
-       
             height: 40px;
             padding: 0 !important;
             font-size: 14px;
@@ -160,6 +173,8 @@ export default {
             border-bottom: $grey-slight-border;
           }
           & td {
+            opacity: 1;
+            transition: all 0.5s;
             height: 20px;
             padding: 0 !important;
             background: white;
@@ -175,6 +190,23 @@ export default {
             }
             &.status-absent::before {
               background-color: red;
+            }
+            &.list-button {
+              opacity: 1;
+              transition: all 0.2s;
+              cursor: pointer;
+              & .arrow {
+                @include arrow;
+              }
+              &:hover {
+                opacity: 0.4;
+              }
+            }
+          }
+          &.lineLink:hover {
+            & td {
+              cursor: pointer;
+              opacity: 0.3;
             }
           }
         }

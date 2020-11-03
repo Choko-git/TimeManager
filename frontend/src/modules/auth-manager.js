@@ -1,7 +1,7 @@
 import axios from "axios";
 import router from '@/router';
 import store from '@/store';
-
+import { apiUrl } from '@/env-config';
 let used = false;
 
 function checkToken() {
@@ -10,7 +10,7 @@ function checkToken() {
             used = true
             const token = localStorage.getItem('token')
             if (token) {
-                axios.get("http://localhost:4000/api/users/log_in/token")
+                axios.get(`${apiUrl}/users/log_in/token`)
                     .then(result => auth(result).then(() => resolve(true)))
                     .catch(() => {
                         localStorage.removeItem('token');
