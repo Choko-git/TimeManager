@@ -8,10 +8,7 @@ function getAndSetData() { getData().then(res => setData(res.data.data)) }
 function getData() { return axios.get(`http://localhost:4000/api/users`) }
 function setData(data) {
     data.forEach(_ => allData.push(_))
-    return store.dispatch("changeData", {
-        data: allData,
-    })
-
+    return store.dispatch("changeData", allData)
 }
 
 

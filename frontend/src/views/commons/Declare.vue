@@ -45,20 +45,26 @@ export default {
   components: { FormClassic },
   data: function () {
     return {
-      start: null,
-      break_time: null,
-      end: null,
-      total_time: null,
-      status: null,
-      error: null,
       late_clock: null,
+      obj_clock: null,
+      //allData: null,
     };// le jour du working time soit le jour du clock
   },
-  created: function() {
-    axios
-      .get(`http://localhost:4000/api/clocks/${this.user.id}`)
-      .then(response => (console.log(response.data.data)))
-      // Faire une method ?
+  created: async function() {
+    this.allData = this.$store.state.data;
+    let response = await axios.get(`http://localhost:4000/api/clocks/${this.user.id}`)
+    this.obj_clock = response.data.data
+    console.log(this.allData)
+    for (var i = 0; i < this.obj_clock.length; i++) {
+      console.log(new Date(this.obj_clock[i].start).getDay())
+      this.late_clock += 1
+    }
+  },
+  watch: {
+    "$store.state.data": function (data) {
+      this.allData = data
+      console.log(this.allData)
+    },
   },
   computed: mapState({
     user: (state) => (state.auth.isAuth ? state.auth.user : null),
@@ -82,11 +88,6 @@ export default {
         status: false,
       }
     },
-    lateCloking: function() {
-      return {
-        late_clock: 3,
-      }
-    }
   },
 };
 
