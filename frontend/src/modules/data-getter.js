@@ -12,6 +12,5 @@ function setData(data) {
     return store.dispatch("changeData", allData)
 }
 
-
 export default allData;
 

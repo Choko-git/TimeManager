@@ -4,7 +4,7 @@ defmodule Backend.Teams.Team do
 
   schema "teams" do
     field :name, :string
-  
+
     many_to_many :users, Backend.Users.User, join_through: "belongs"
     timestamps()
   end

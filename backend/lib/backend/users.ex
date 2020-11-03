@@ -130,6 +130,7 @@ defmodule Backend.Users do
     |> preload([:teams])
     |> preload([:vacations])
     |> preload([:workingtimes])
+    |> preload([:clocks])
     |> preload([:employees])
     |> Repo.all()
   end

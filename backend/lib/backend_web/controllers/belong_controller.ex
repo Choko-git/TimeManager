@@ -11,12 +11,10 @@ defmodule BackendWeb.BelongController do
     render(conn, "index.json", belongs: belongs)
   end
 
-  def create(conn,belong_params) do
-    with {:ok, %Belong{} = belong} <- Belongs.create_belong(belong_params) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", belong: belong)
-    end
+  def create(conn, belong_params) do
+    Enum.each(belong_params.user_ids, fn user_id ->
+      Belongs.create_belong(%{team_id: belong_params.team_id, user_id: user_id})
+    end)
   end
 
   def show(conn, %{"id" => id}) do

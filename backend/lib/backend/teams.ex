@@ -35,9 +35,11 @@ defmodule Backend.Teams do
       ** (Ecto.NoResultsError)
 
   """
-  def get_team!(id)
-   do
-    Repo.get!(Team, id)
+  def get_team!(id) do
+    Team
+    |> where([id: ^id])
+    |> preload([:users])
+    |> Repo.all
    end
 
    def get_team_with_users!(id) do
