@@ -1,13 +1,29 @@
 <template>
   <form class="classic-form" @submit.prevent="submitForm">
     <div class="form-field" v-for="field of fields" :key="field.name">
-      <label v-if="field.label">{{ field.label }}</label>
-      <input
-        :type="field.type"
-        v-model="field.value"
-        :placeholder="field.placeholder"
-        @keyup="checkRequiredFields"
-      />
+      <div class="m-0" :class="{ hidden: field.if && !field.display }">
+        <label v-if="field.label">{{ field.label }}</label>
+        <TextInput
+          v-if="!['select', 'autoComplete'].includes(field.type)"
+          :field="field"
+          :changeMethod="fieldChange"
+        />
+        <SelectInput
+          v-else-if="field.type === 'select'"
+          :field="field"
+          :changeMethod="fieldChange"
+        />
+        <AutoCompleteInput
+          v-else
+          :field="field"
+          :placeholder="field.placeholder"
+          keyToShow="username"
+          :dropDown="true"
+          :noDataText="field.noDataText"
+          @searchData="searchData($event, field)"
+          @dataSelected="selectData($event, field)"
+        />
+      </div>
     </div>
     <FormSubmit
       :buttonName="submitButtonName"
@@ -20,6 +36,9 @@
 
 <script>
 import FormSubmit from "@/components/form/FormSubmit";
+import TextInput from "@/components/inputs/TextInput";
+import SelectInput from "@/components/inputs/SelectInput";
+import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 import errorHandler from "@/modules/error-handler";
 import { checkText, checkEmail } from "@/modules/field-checker";
 
@@ -41,6 +60,9 @@ export default {
   ],
   components: {
     FormSubmit,
+    TextInput,
+    SelectInput,
+    AutoCompleteInput,
   },
   created: function () {
     this.fields.forEach((_) => {
@@ -50,22 +72,47 @@ export default {
     });
     this.checkRequiredFields();
   },
+
   methods: {
+    searchData(event, field) {
+      field.value = null;
+      field.dataToSelect = field.searchData(event);
+    },
+    selectData(event, field) {
+      field.value = event.id;
+      this.checkRequiredFields();
+    },
     getCheckFieldFromType(type) {
       switch (type) {
-        case "text": return checkText;
-        case "email" : return checkEmail;
-        default: return null;
+        case "text":
+          return checkText;
+        case "email":
+          return checkEmail;
+        default:
+          return null;
       }
     },
-    checkRequiredFields() {
-      this.buttonDisabled = this.fields.find((field) => {
-        let value = field.value;
-        if (value && field.checkFieldMethod) {
-          value = field.checkFieldMethod(value);
+    fieldChange() {
+      this.fields.forEach((field) => {
+        if (field.if) {
+          field.display = field.if(this.fields);
         }
-        return !value && field.required;
       });
+      this.checkRequiredFields();
+      this.$forceUpdate();
+    },
+    checkRequiredFields() {
+      this.buttonDisabled =
+        this.fields.filter((field) => {
+          let value = field.value;
+          if (value && field.checkFieldMethod) {
+            value = field.checkFieldMethod(value);
+          }
+          const fieldNotDisplay = field.if && !field.display;
+          const check = !value && field.required !== false && !fieldNotDisplay;
+          field.redBorder = check && value !== undefined && value !== "";
+          return check;
+        }).length > 0;
     },
     submitForm: function () {
       if (!this.loading) {
@@ -96,15 +143,22 @@ export default {
   @include flex-container-column;
   & .form-field {
     & * {
+      transition: all 0.5s;
+      opacity: 1;
       margin-top: 20px;
     }
     & input {
-      width: 100%;
-      padding: 5px;
-      border: $classic-border;
-      &:focus {
-        outline: $grey-slight-border;
+      @include classic-input;
+    }
+    & select {
+      @include classic-select-input;
+      & option {
+        color: black;
       }
+    }
+    & .hidden {
+      opacity: 0;
+      pointer-events: none;
     }
   }
 }

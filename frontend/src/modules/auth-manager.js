@@ -12,7 +12,10 @@ function checkToken() {
             if (token) {
                 axios.get("http://localhost:4000/api/users/log_in/token")
                     .then(result => auth(result).then(() => resolve(true)))
-                    .catch(() => localStorage.clear() && resolve(false))
+                    .catch(() => {
+                        localStorage.removeItem('token');
+                        resolve(false)
+                    })
             }
             else {
                 resolve(false)
@@ -24,7 +27,7 @@ function checkToken() {
 
 function auth(res) {
     localStorage.setItem('token', res.data.token)
-    return store.dispatch("change", {
+    return store.dispatch("changeAuth", {
         isAuth: true,
         user: res.data.user,
     })
@@ -39,8 +42,8 @@ function logOutAndRedirect() {
 }
 
 function logOut() {
-    localStorage.clear()
-    return store.dispatch("change", {
+    localStorage.removeItem('token')
+    return store.dispatch("changeAuth", {
         isAuth: false,
         user: null,
     })

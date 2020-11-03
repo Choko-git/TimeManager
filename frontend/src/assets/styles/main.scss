@@ -3,12 +3,15 @@
 @import "./settings/border.scss";
 @import "./settings/transition.scss";
 @import "./settings/logo.scss";
+@import "./settings/font.scss";
 
 @import "./mixins/box.scss";
 @import "./mixins/cards.scss";
 @import "./mixins/containers.scss";
 @import "./mixins/flex-box.scss";
 @import "./mixins/background-image.scss";
+@import "./mixins/inputs.scss";
+@import "./mixins/drop-down.scss";
 
 * {
   -webkit-touch-callout: none; /* iOS Safari */

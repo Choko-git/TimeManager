@@ -19,7 +19,7 @@ export default {
   props: ["name", "icon", "active", "badge"],
   methods: {
     onMouseEvent: function (value) {
-      this.$emit("mouseEvent", value);
+      this.$emit("mouse-event", value);
     },
   },
   watch: {

@@ -47,21 +47,15 @@ router.beforeEach((to, from, next) => {
       routerLoading = true;
       checkToken(next)
         .then(checked => {
-          console.log(checked);
           routerLoading = false;
-          if (!checked) {
-            next({ name: 'LogIn' })
-          }
-          else {
-            checkPath(to.path) ? next() : next({ name: 'Home' })
-          }
+          next({ name: checked ? checkPath(to.path) || 'Home' : 'LogIn' });
         });
     }
     else next()
   }
 })
 
-const checkPath = (path) => usedRoutes.includes(path)
+const checkPath = (path) => usedRoutes.find(_ => _.path === path)?.name;
 
 store.watch(
   (state) => state.auth,
@@ -71,7 +65,7 @@ store.watch(
       const role = auth.user.role
       const newRoutes = generateRoutes(role)
       router.addRoutes([...mainRoutes, ...newRoutes]);
-      usedRoutes = newRoutes.map(_ => _.path).filter(_ => _ !== '/management');
+      usedRoutes = newRoutes.filter(_ => _.path !== '/management');
     }
     else {
       usedRoutes = null;
