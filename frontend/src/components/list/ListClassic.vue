@@ -131,12 +131,12 @@ export default {
         border: none;
       }
       & thead {
-        height: 20px;
         & tr {
           background-repeat: no-repeat;
           background-position: right;
-          height: 100%;
           & th {
+       
+            height: 40px;
             padding: 0 !important;
             font-size: 14px;
             color: $main-color-1;
@@ -157,7 +157,7 @@ export default {
         & tr {
           height: 45px;
           &:not(:last-child) {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.432);
+            border-bottom: $grey-slight-border;
           }
           & td {
             height: 20px;

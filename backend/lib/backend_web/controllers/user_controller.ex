@@ -49,12 +49,8 @@ defmodule BackendWeb.UserController do
   end
 
   def create_token(conn, user) do
-    date =
-      Date.utc_today()
-      |> Date.add(30)
-
     # csrf = get_csrf_token()
-    extra_claims = %{"user_id" => user.id, "role" => user.role, "expiresAt" => date}
+    extra_claims = %{"user_id" => user.id, "role" => user.role}
     token = Backend.Token.generate_and_sign!(extra_claims)
     render(conn, "sign.json", %{token: token, user: user})
     # conn

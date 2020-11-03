@@ -11,6 +11,7 @@ defmodule Backend.Plugs.Authenticate do
       authorization = List.keyfind(conn.req_headers, "authorization", 0)
       token = Enum.at(String.split(elem(authorization, 1)), 1)
       result = validate_token(token)
+
       case result do
         :missing_token ->
           conn |> send_resp(401, "Missing valid API token") |> halt
@@ -34,33 +35,20 @@ defmodule Backend.Plugs.Authenticate do
   end
 
   def assign_user(token) do
-    {:ok, claims} = Backend.Token.verify_and_validate(token)
-    case claims do
-      nil ->
+    result = Backend.Token.verify_and_validate(token)
+
+    case result do
+      {:error, message} ->
         :invalid_token
 
+      {:ok, claims} ->
+        user = %{
+          "user_id" => claims["user_id"],
+          "role" => claims["role"]
+        }
+        {:authenticated, user}
       _ ->
-        dateArray = String.split(claims["expiresAt"], "-")
-        {:ok, date} =
-          Date.new(
-            String.to_integer(Enum.at(dateArray, 0)),
-            String.to_integer(Enum.at(dateArray, 1)),
-            String.to_integer(Enum.at(dateArray, 2))
-          )
-        checkDate = Date.compare(Date.utc_today(), date)
-        case checkDate do
-          :gt ->
-            :invalid_token
-
-          :lt ->
-            user = %{
-              "user_id" => claims["user_id"],
-              "role" => claims["role"],
-              "expiresAt" => claims["expiresAt"]
-            }
-
-            {:authenticated, user}
-        end
+        :invalid_token
     end
   end
 end
