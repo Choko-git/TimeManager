@@ -11,10 +11,16 @@ defmodule BackendWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def create(conn, user_params) do
     hash = Bcrypt.add_hash(user_params["password"])
     user_params = Map.replace!(user_params, "password", hash[:password_hash])
 
+    user_params =
+      if !user_params["surpervisor_id"] do
+        Map.replace(user_params, "surpervisor_id", conn.assigns.current_user["user_id"])
+      else
+        user_params
+      end
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -43,11 +49,8 @@ defmodule BackendWeb.UserController do
   end
 
   def create_token(conn, user) do
-    date =
-      Date.utc_today()
-      |> Date.add(30)
     # csrf = get_csrf_token()
-    extra_claims = %{"user_id" => user.id, "role" => user.role, "expiresAt" => date}
+    extra_claims = %{"user_id" => user.id, "role" => user.role}
     token = Backend.Token.generate_and_sign!(extra_claims)
     render(conn, "sign.json", %{token: token, user: user})
     # conn
@@ -76,13 +79,13 @@ defmodule BackendWeb.UserController do
     end
   end
 
-  #def get_users_params(conn, params) do
-    #users = Users.get_users_by_params!(params)
-   # render(conn, "index.json", users: users)
-  #end
+  # def get_users_params(conn, params) do
+  # users = Users.get_users_by_params!(params)
+  # render(conn, "index.json", users: users)
+  # end
 
-  def get_all_users(conn,params) do
-    userId  = conn.assigns.current_user["user_id"]
+  def get_all_users(conn, params) do
+    userId = conn.assigns.current_user["user_id"]
     users = Users.get_users_of_supervisor!(userId)
     render(conn, "index.json", users: users)
   end
@@ -91,5 +94,4 @@ defmodule BackendWeb.UserController do
     user = Users.get_user_with_teams!(params)
     render(conn, "show.json", user: user)
   end
-
 end

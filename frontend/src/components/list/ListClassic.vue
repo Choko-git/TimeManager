@@ -46,7 +46,7 @@
     <Pager
       :totalPages="totalPages"
       :page="page"
-      v-on:changePage="changePage($event)"
+      @changePage="changePage($event)"
     />
   </div>
 </template>
@@ -66,9 +66,8 @@ export default {
   created: function () {
     if (this.data) {
       this.noData = false;
-    } else {
       this.setDataToShow();
-    }
+    } 
   },
   components: {
     Pager,
@@ -111,16 +110,17 @@ export default {
     display: flex;
     width: 100%;
     & .no-data-block {
-      height: 150px;
+      height: 100px;
       width: 100%;
       padding: 20px 50px;
       background-color: $main-color-3;
-      border-radius: 30px;
       display: flex;
       & h2 {
         margin: auto;
-        font-size: 30px;
+        font-size: 25px;
+        font-style: italic;
         color: $main-color-1;
+        font-weight: normal;
       }
     }
     & table {
@@ -131,12 +131,12 @@ export default {
         border: none;
       }
       & thead {
-        height: 20px;
         & tr {
           background-repeat: no-repeat;
           background-position: right;
-          height: 100%;
           & th {
+       
+            height: 40px;
             padding: 0 !important;
             font-size: 14px;
             color: $main-color-1;
@@ -157,7 +157,7 @@ export default {
         & tr {
           height: 45px;
           &:not(:last-child) {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.432);
+            border-bottom: $grey-slight-border;
           }
           & td {
             height: 20px;

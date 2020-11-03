@@ -12,7 +12,7 @@ defmodule BackendWeb.UserView do
 
   def render("show_create.json", %{user: user}) do
     %{id: user.id,
-      name: user.username,
+      username: user.username,
       email: user.email,
       role: user.role,
       right_active: user.right_active

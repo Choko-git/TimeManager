@@ -4,13 +4,58 @@
       <div class="page-title">
         <h1>Employees</h1>
       </div>
+      <div id="create-employee">
+        <SetButtonDropDown
+          buttonType="ButtonClassic"
+          buttonName="Create an employee"
+          dropDownType="DropDownForm"
+          dropDownEvent="click"
+          formSubmitButtonName="Submit"
+          :dropDownFormFields="[
+            { name: 'username', placeholder: 'Username', type: 'text' },
+            { name: 'email', placeholder: 'Email', type: 'email' },
+            { name: 'password', placeholder: 'Password', type: 'text' },
+            {
+              name: 'role',
+              placeholder: 'Role',
+              type: 'select',
+              value: '',
+              options: [
+                {
+                  name: 'Employee',
+                  value: 'employee',
+                },
+                {
+                  name: 'Manager',
+                  value: 'manager',
+                },
+              ],
+            },
+            {
+              name: 'surpervisor_id',
+              placeholder: 'Choose a manager',
+              type: 'autoComplete',
+              noDataText: 'No user found',
+              dataToSelect: [],
+              searchData: searchManager,
+              if: (data) => data[3].value === 'employee',
+            },
+          ]"
+          dropDownFormHttpMethod="post"
+          dropDownFormApiRoute="/users"
+          dropDownWidth="300px"
+          :dropDownHeight="role === 'admin' ? '410px' : '250px'"
+          :formSubmitMethod="beforeCreated"
+          :formValidMethod="() => {}"
+        />
+      </div>
 
       <div id="search-field">
-        <AutoCompleteField
+        <AutoCompleteInput
           placeholder="Search an employee ..."
           keyToShow="username"
-          v-on:searchData="addRegExp($event)"
-          v-on:dataSelected="changeUser($event)"
+          @searchData="addRegExp($event)"
+          @dataSelected="changeUser($event)"
         />
       </div>
       <div v-if="employeesListData" id="employees-list">
@@ -30,8 +75,8 @@
 
 <script>
 import ListClassic from "@/components/list/ListClassic";
-import AutoCompleteField from "@/components/inputs/AutoCompleteField";
-
+import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
+import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
 import { mapState } from "vuex";
 
 export default {
@@ -46,13 +91,15 @@ export default {
   }),
   components: {
     ListClassic,
-    AutoCompleteField,
+    AutoCompleteInput,
+    SetButtonDropDown,
   },
   created: function () {
     const allData = this.$store.state.data?.data;
     this.employeesData = [];
     this.flattenEmployees(this.employeesData, allData);
     this.setWholeTable();
+          console.log(this.employeesListData);
   },
   computed: mapState({
     role: (state) => (state.auth.isAuth ? state.auth.user.role : null),
@@ -63,12 +110,31 @@ export default {
       this.employeesData = [];
       this.flattenEmployees(this.employeesData, allData);
       this.setWholeTable();
+
     },
   },
   methods: {
-    addRegExp: function(value){
-        this.regExp = new RegExp(value.toLowerCase().trim().replace(/\s+/g, '').split('').join(' *'));
-        this.searchUsers();
+    beforeCreated(data){
+      if(data.role === 'manager'){
+        data.surpervisor_id = null;
+      }
+      return data
+    },
+    searchManager: function (value) {
+      if (value) {
+        const regExp = new RegExp(
+          value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+        );
+        return this.employeesData.filter((_) => {
+          return _.role === "manager" && regExp.test(_.username.toLowerCase());
+        });
+      } else return [];
+    },
+    addRegExp: function (value) {
+      this.regExp = new RegExp(
+        value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+      );
+      this.searchUsers();
     },
     searchUsers: function () {
       this.employeesListData = [];
@@ -178,11 +244,15 @@ export default {
 <style lang="scss">
 #employees {
   @include page;
+  & #create-employee {
+    display: flex;
+    margin: 30px 0 60px 0;
+  }
   & #search-field {
     width: 250px;
   }
   & #employees-list {
-    margin: 100px auto 0 auto;
+    margin: 40px auto 0 auto;
     width: 800px;
   }
 }

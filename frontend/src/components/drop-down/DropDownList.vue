@@ -11,9 +11,13 @@
         v-for="element of data"
         :key="element.name"
         @click.stop="clickOnElement(element)"
-        :style="[element.icon ? {
-          backgroundImage: `url(${require(`../../assets/icons/${element.icon}.svg`)})`,
-        } : '']"
+        :style="[
+          element.icon
+            ? {
+                backgroundImage: `url(${require(`../../assets/icons/${element.icon}.svg`)})`,
+              }
+            : '',
+        ]"
       >
         {{ element.name }}
       </li>
@@ -23,51 +27,24 @@
 
 <script>
 export default {
-  props: ["active", "data", "width"],
+  props: ["active", "data", "width", "mouseEvent"],
   methods: {
     activeDropDown: function (value) {
-      this.$emit("mouseEvent", value);
+      if (this.mouseEvent) {
+        this.$emit("mouse-event", value);
+      }
     },
-    clickOnElement(element){
-      if(element.method){
+    clickOnElement(element) {
+      if (element.method) {
         element.method();
       }
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .list-dropdown {
-  transition: all .1s;
-  position: absolute;
-  top: 50%;
-  transform: translateY(50%);
-  background-color: $light-grey;
-  border-radius: 10px;
-  box-shadow: $grey-box-shadow;
-  pointer-events: none;
-  opacity: 0;
-  & ul {
-    list-style: none;
-    padding: 0 0 0 10px;
-    margin: 0;
-    & li {
-      transition: all .1s;
-      cursor: pointer;
-      color: $darker-grey;
-      border-top: $grey-slight-border;
-      padding: 7px 0;
-      @include bgi-right-header;
-      &:hover {
-        font-weight: bold;
-        opacity: 0.9;
-      }
-    }
-  }
-  &.active {
-    pointer-events: all;
-    opacity: 1;
-  }
+  @include listDropDown
 }
 </style>
