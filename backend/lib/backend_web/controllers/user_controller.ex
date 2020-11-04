@@ -12,8 +12,8 @@ defmodule BackendWeb.UserController do
   end
 
   def create(conn, user_params) do
-    hash = Bcrypt.add_hash(user_params["password"])
-    user_params = Map.replace!(user_params, "password", hash[:password_hash])
+    #hash = Bcrypt.add_hash(user_params["password"])
+    #user_params = Map.replace!(user_params, "password", hash[:password_hash])
 
     user_params =
       if !user_params["surpervisor_id"] do
@@ -32,16 +32,16 @@ defmodule BackendWeb.UserController do
 
   def log_in(conn, user_params) do
     user = Users.get_by_email(user_params)
-    res = Bcrypt.check_pass(user, user_params["password"], hash_key: :password, hide_user: true)
-    check = elem(res, 0)
+#    res = Bcrypt.check_pass(user, user_params["password"], hash_key: :password, hide_user: true)
+#    check = elem(res, 0)
 
-    if to_string(check) == "error" do
-      conn
-      |> put_status(:bad_request)
-      |> text("Email or password incorrect")
-    else
+ #   if to_string(check) == "error" do
+ #     conn
+ #     |> put_status(:bad_request)
+ #     |> text("Email or password incorrect")
+ #   else
       create_token(conn, user)
-    end
+#    end
   end
 
   def log_in_with_token(conn, _params) do
@@ -51,8 +51,11 @@ defmodule BackendWeb.UserController do
   end
 
   def create_token(conn, user) do
+    date =
+      Date.utc_today()
+      |> Date.add(30)
     # csrf = get_csrf_token()
-    extra_claims = %{"user_id" => user.id, "role" => user.role}
+    extra_claims = %{"user_id" => user.id, "role" => user.role, "expiresAt" => date}
     token = Backend.Token.generate_and_sign!(extra_claims)
     render(conn, "sign.json", %{token: token, user: user})
     # conn
@@ -81,13 +84,13 @@ defmodule BackendWeb.UserController do
     end
   end
 
-  # def get_users_params(conn, params) do
-  # users = Users.get_users_by_params!(params)
-  # render(conn, "index.json", users: users)
-  # end
+  #def get_users_params(conn, params) do
+    #users = Users.get_users_by_params!(params)
+   # render(conn, "index.json", users: users)
+  #end
 
-  def get_all_users(conn, params) do
-    userId = conn.assigns.current_user["user_id"]
+  def get_all_users(conn,params) do
+    userId  = conn.assigns.current_user["user_id"]
     users = Users.get_users_of_supervisor!(userId)
     render(conn, "index.json", users: users)
   end
@@ -102,4 +105,5 @@ defmodule BackendWeb.UserController do
     user = Users.get_user_with_teams!(params)
     render(conn, "show.json", user: user)
   end
+
 end

@@ -37,17 +37,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
-
-  cordova:
-    build: 
-      context: ./timemanager_mobile
-      dockerfile: Dockerfile
-            
-    volumes:
-        - ./cordova_timemanager
-    ports:
-        - '8000:8000'
-    depends_on:
-        - vuejs
 volumes:
   pgdata:
