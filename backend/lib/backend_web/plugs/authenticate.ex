@@ -8,10 +8,6 @@ defmodule Backend.Plugs.Authenticate do
 
   def call(conn, _) do
     if conn.request_path !== "/api/users/log_in" do
-<<<<<<< HEAD
-    #if conn.request_path !== "/api/users/log_in" do
-=======
->>>>>>> 8ebe42ead6ac35cbaaf60cfd00b8f78684d26236
       authorization = List.keyfind(conn.req_headers, "authorization", 0)
       token = Enum.at(String.split(elem(authorization, 1)), 1)
       result = validate_token(token)
