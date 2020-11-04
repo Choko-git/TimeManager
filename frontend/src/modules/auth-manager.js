@@ -50,7 +50,7 @@ function logOut() {
 }
 
 function RedirectOnDeclare(res) {
-    auth(res).then(() => router.push('/home'))
+    auth(res).then(() => router.push('/declare'))
 }
 
 export { checkToken, authAndRedirect, logOutAndRedirect, RedirectOnDeclare };
