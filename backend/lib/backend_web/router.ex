@@ -21,7 +21,7 @@ defmodule BackendWeb.Router do
     post "/users/log_in", UserController, :log_in
     get "/users/log_in/token", UserController, :log_in_with_token
     put "/users/userID", UserController, :update
-    post "/user/sign_up", UserController, :create
+    post "/users/sign_up", UserController, :create
 
     # Routes pour WorkingTime
     #get "/workingtimes/:userID", WorkingtimeController, :get_all
