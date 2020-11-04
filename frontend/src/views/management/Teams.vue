@@ -21,7 +21,7 @@
               dataToSelect: [],
               searchData: searchManager,
               notHere: role !== 'admin',
-              change: managerSelected
+              change: managerSelected,
             },
             {
               name: 'user_ids',
@@ -31,17 +31,17 @@
               dataToSelect: [],
               array: true,
               searchData: searchEmployee,
-              disabled: (role === 'admin' && !selectedManager.id),
+              disabled: role === 'admin' && !selectedManager.id,
               listValue: selectedEmployees,
               listKey: 'username',
               change: employeeSelected,
-              deleteMethod: employeeDeleted
+              deleteMethod: employeeDeleted,
             },
           ]"
           dropDownFormHttpMethod="post"
           dropDownFormApiRoute="/users"
           dropDownWidth="300px"
-          :dropDownHeight="role === 'admin' ? '350px' : '210px'"
+          :dropDownHeight="role === 'admin' ? '350px' : '280px'"
           :formSubmitMethod="beforeCreated"
           :formValidMethod="teamCreated"
         />
@@ -168,12 +168,15 @@ export default {
         .splice(0, 10);
     },
     searchEmployee(value) {
+      const condition = this.role !== 'admin'
       if (value) {
         const regExp = this.createRegExp(value);
         return this.filterWithRegexp(regExp, this.employeesData, (data) => {
+          console.log(data);
+          console.log(condition);
           return (
-            this.selectedEmployees.findIndex((_) => _ === data) === -1 &&
-            data["surpervisor_id"] === this.selectedManager.id
+            this.selectedEmployees.findIndex((_) => _ === data) === -1 && 
+            (condition || data["surpervisor_id"] === this.selectedManager.id)
           );
         });
       } else return [];
@@ -212,7 +215,7 @@ export default {
     setTeamsData(data) {
       this.role === "admin"
         ? this.setTeamsByManager(data)
-        : this.setTeamsDataList(data);
+        : this.setTeams(data);
     },
     setTeamsByManager(data) {
       this.teamsData.length = 0;

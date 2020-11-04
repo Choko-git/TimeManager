@@ -16,6 +16,7 @@
             { name: 'email', placeholder: 'Email', type: 'email' },
             { name: 'password', placeholder: 'Password', type: 'text' },
             {
+              notHere:  this.role !== 'admin',
               name: 'role',
               placeholder: 'Role',
               type: 'select',
@@ -32,6 +33,7 @@
               ],
             },
             {
+                  notHere:  this.role !== 'admin',
               name: 'surpervisor_id',
               placeholder: 'Choose a manager',
               type: 'autoComplete',
@@ -44,7 +46,7 @@
           dropDownFormHttpMethod="post"
           dropDownFormApiRoute="/users"
           dropDownWidth="300px"
-          :dropDownHeight="role === 'admin' ? '410px' : '250px'"
+          :dropDownHeight="role === 'admin' ? '410px' : '280px'"
           :formSubmitMethod="beforeCreated"
           :formValidMethod="employeeCreated"
 
@@ -114,7 +116,7 @@ export default {
   },
   methods: {
     initData() {
-      const allEmployees = this.$store.state.data?.employees;
+      const allEmployees = this.$store.state.data?.employees || [];
       this.employeesData = [];
       this.flattenEmployees(this.employeesData, allEmployees);
       this.setWholeTable();
@@ -122,6 +124,8 @@ export default {
     employeeCreated(data) {
       const user = data.data;
       const me = this.$store.state.data;
+      console.log(me);
+      console.log(data);
       if (user.surpervisor_id === me.id) {
         me.employees.push(user);
       } else {
@@ -138,8 +142,9 @@ export default {
       console.log(employee);
     },
     beforeCreated(data) {
+      console.log(data);
       if (data.role === "manager") {
-        data.surpervisor_id = null;
+        data.surpervisor_id = undefined;
       }
       return data;
     },
@@ -171,7 +176,7 @@ export default {
         return this.checkRegExp(_.username);
       });
     },
-    flattenEmployees: function (array, employees = this.employeesData) {
+    flattenEmployees: function (array, employees) {
       if (employees) {
         for (const employee of employees) {
           array.push({ ...employee, employees: null });

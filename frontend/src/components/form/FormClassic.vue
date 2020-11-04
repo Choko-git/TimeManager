@@ -20,6 +20,7 @@
         <AutoCompleteInput
           v-else
           :field="field"
+          :disabled="field.disabled"
           :placeholder="field.placeholder"
           keyToShow="username"
           :dropDown="true"
@@ -119,7 +120,7 @@ export default {
             value = field.checkFieldMethod(value);
           }
           const fieldNotDisplay = field.if && !field.display;
-          const check = !value && field.required !== false && !fieldNotDisplay;
+          const check = !value && field.required !== false && !fieldNotDisplay && !field.notHere;
           field.redBorder = check && value !== undefined && value !== "";
           return check;
         }).length > 0;

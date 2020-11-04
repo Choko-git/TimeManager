@@ -23,7 +23,7 @@
       @focus="isFocus = true"
       @blur="focusOut"
       :placeholder="placeholder"
-      :disabled="field.disabled"
+      :disabled="disabled"
     />
     <div
       v-if="isFocus && dropDown && inputTyped"
@@ -81,7 +81,8 @@ export default {
     "field",
     "keyToShow",
     "dropDown",
-    "array"
+    "array",
+    "disabled"
   ],
   methods: {
     focusOut: function () {
