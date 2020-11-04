@@ -15,7 +15,7 @@ const routes = [
         component: Dashboard
     },
     {
-        path: '/management/employee',
+        path: '/management/employees/:id',
         name: 'Employee',
         component: Employee
     },

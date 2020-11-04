@@ -1,8 +1,8 @@
 const webpack = require('webpack');
 
 module.exports = {
-  outputDir: '/Users/paulmanagau/epitech/api-project/mobile/www',
-  publicPath: '',
+  //outputDir: '../timemanager_mobile/www',
+  //publicPath: '',
   
   configureWebpack: {
     plugins: [
@@ -16,11 +16,10 @@ module.exports = {
           additionalData : `@import "@/assets/styles/main.scss";`
       }
     }
-  },
-
-  publicPath: '',
-
-  pluginOptions: {
-    cordovaPath: 'src-cordova'
   }
+
+  //publicPath: '',
+  //pluginOptions: {
+   // cordovaPath: '../timemanager_mobile'
+ // }
 };
