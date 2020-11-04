@@ -12,8 +12,8 @@ defmodule BackendWeb.UserController do
   end
 
   def create(conn, user_params) do
-    #hash = Bcrypt.add_hash(user_params["password"])
-    #user_params = Map.replace!(user_params, "password", hash[:password_hash])
+    hash = Bcrypt.add_hash(user_params["password"])
+    user_params = Map.replace!(user_params, "password", hash[:password_hash])
 
     user_params =
       if !user_params["surpervisor_id"] do
@@ -32,16 +32,16 @@ defmodule BackendWeb.UserController do
 
   def log_in(conn, user_params) do
     user = Users.get_by_email(user_params)
-#    res = Bcrypt.check_pass(user, user_params["password"], hash_key: :password, hide_user: true)
-#    check = elem(res, 0)
+    res = Bcrypt.check_pass(user, user_params["password"], hash_key: :password, hide_user: true)
+    check = elem(res, 0)
 
- #   if to_string(check) == "error" do
- #     conn
- #     |> put_status(:bad_request)
- #     |> text("Email or password incorrect")
- #   else
+    if to_string(check) == "error" do
+      conn
+      |> put_status(:bad_request)
+      |> text("Email or password incorrect")
+    else
       create_token(conn, user)
-#    end
+    end
   end
 
   def log_in_with_token(conn, _params) do
