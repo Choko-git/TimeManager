@@ -11,9 +11,17 @@ defmodule BackendWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
-  def create(conn,user_params) do
+  def create(conn, user_params) do
     #hash = Bcrypt.add_hash(user_params["password"])
     #user_params = Map.replace!(user_params, "password", hash[:password_hash])
+
+    user_params =
+      if !user_params["surpervisor_id"] do
+        Map.delete(user_params, "surpervisor_id")
+        Map.put(user_params, "surpervisor_id", conn.assigns.current_user["user_id"])
+      else
+        user_params
+      end
 
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
@@ -68,9 +76,9 @@ defmodule BackendWeb.UserController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-
+  def delete(conn, params) do
+    user = Users.get_user!(params["id"])
+    Backend.Belongs.delete_by_user(params)
     with {:ok, %User{}} <- Users.delete_user(user) do
       send_resp(conn, :no_content, "")
     end
@@ -85,6 +93,12 @@ defmodule BackendWeb.UserController do
     userId  = conn.assigns.current_user["user_id"]
     users = Users.get_users_of_supervisor!(userId)
     render(conn, "index.json", users: users)
+  end
+
+  def get_me(conn, params) do
+    userId = conn.assigns.current_user["user_id"]
+    user = Users.get_me(userId)
+    render(conn, "show.json", user: user)
   end
 
   def get_user_teams(conn, params) do

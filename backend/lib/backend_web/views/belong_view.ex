@@ -7,6 +7,7 @@ defmodule BackendWeb.BelongView do
   end
 
   def render("show.json", %{belong: belong}) do
+    IO.puts "------------DFSDFHDFGDFGHDFDFFDFDFF"
     %{data: render_one(belong, BelongView, "belong.json")}
   end
 

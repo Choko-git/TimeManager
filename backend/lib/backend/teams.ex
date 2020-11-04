@@ -35,9 +35,17 @@ defmodule Backend.Teams do
       ** (Ecto.NoResultsError)
 
   """
-  def get_team!(id)
-   do
-    Repo.get!(Team, id)
+  def get_team!(id) do
+    Team
+    |> where([id: ^id])
+    |> preload([:users])
+    |> Repo.all
+   end
+
+   def get_team_before_delete!(id) do
+    Team
+    |> where([id: ^id])
+    |> Repo.one
    end
 
    def get_team_with_users!(id) do
@@ -98,7 +106,7 @@ defmodule Backend.Teams do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_team(%Team{} = team) do
+  def delete_team(team) do
     Repo.delete(team)
   end
 
