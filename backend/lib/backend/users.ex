@@ -109,12 +109,14 @@ defmodule Backend.Users do
       else
         true
       end
+
     gradeCheck =
       if params["surpervisor_id"] do
         dynamic([user], user.surpervisor_id == ^params["surpervisor_id"])
       else
         true
       end
+
     User
     |> where(^roleCheck)
     |> where(^gradeCheck)
@@ -123,7 +125,7 @@ defmodule Backend.Users do
 
   def get_me(userId) do
     User
-    |> where([id: ^userId])
+    |> where(id: ^userId)
     |> preload([:teams])
     |> preload([:vacations])
     |> preload([:workingtimes])
@@ -132,30 +134,39 @@ defmodule Backend.Users do
   end
 
   def get_users_of_supervisor!(userId) do
-    User
-    |> where([surpervisor_id: ^userId])
-    |> preload([:teams])
-    |> preload([:vacations])
-    |> preload([:workingtimes])
-    |> preload([:clocks])
-    |> preload([:employees])
-    |> preload([:clocks])
+    from(user in User,
+      where: user.surpervisor_id == ^userId,
+      left_join: employees in assoc(user, :employees),
+      left_join: teams in assoc(employees, :teams),
+      left_join: clocks in assoc(employees, :clocks),
+      left_join: workingtimes in assoc(employees, :workingtimes),
+      left_join: vacations in assoc(employees, :vacations),
+      preload: [employees: {employees, teams: teams, vacations: vacations, workingtimes: workingtimes, clocks: clocks}],
+      preload: [:teams],
+      preload: [:vacations],
+      preload: [:workingtimes],
+      preload: [:clocks])
+        |> Repo.all
+    end
+
+  def get_user_with_teams!(id) do
+    from(user_team in User,
+      where: user_team.id == ^id["user_id"],
+      preload: [:teams],
+      preload: [:vacations],
+      preload: [:workingtimes]
+    )
+    |> Repo.one()
+  end
+
+  def get_users_with_teams!() do
+    from(users_teams in User, preload: [:teams], preload: [:vacations], preload: [:workingtimes])
     |> Repo.all()
   end
 
-   def get_user_with_teams!(id) do
-     from(user_team in User,where: user_team.id == ^id["user_id"], preload: [:teams], preload: [:vacations], preload: [:workingtimes])
-     |>Repo.one()
-   end
-
-   def get_users_with_teams!() do
-     from(users_teams in User, preload: [:teams], preload: [:vacations], preload: [:workingtimes])
-     |>Repo.all()
-   end
-
   def get_by_email(user) do
     from(u in User,
-      where: u.email == ^user["email"],
+      where: u.email == ^user["email"]
     )
     |> Repo.one()
   end

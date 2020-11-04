@@ -37,7 +37,7 @@
               name: 'surpervisor_id',
               placeholder: 'Choose a manager',
               type: 'autoComplete',
-              noDataText: 'No user found',
+              noDataText: 'No employee found',
               dataToSelect: [],
               searchData: searchManager,
               if: (data) => data[3].value === 'employee',
@@ -61,6 +61,7 @@
           @dataSelected="changeUser($event)"
         />
       </div>
+
       <div v-if="employeesListData" id="employees-list">
         <ListClassic
           :data="employeesListData"
@@ -95,7 +96,6 @@ export default {
     employeesListData: null,
     sortIndex: 1,
     sortOrder: 1,
-    selectedDate: new Date(),
     regExp: null,
   }),
   components: {
@@ -124,8 +124,6 @@ export default {
     employeeCreated(data) {
       const user = data.data;
       const me = this.$store.state.data;
-      console.log(me);
-      console.log(data);
       if (user.surpervisor_id === me.id) {
         me.employees.push(user);
       } else {
@@ -142,7 +140,6 @@ export default {
       console.log(employee);
     },
     beforeCreated(data) {
-      console.log(data);
       if (data.role === "manager") {
         data.surpervisor_id = undefined;
       }
@@ -202,7 +199,7 @@ export default {
       this.listColumns = [
         { name: "", width: "20px" },
         {
-          name: "Members",
+          name: "Name",
           width: defaultWidth,
           sortIndex: 1,
         },
@@ -253,19 +250,7 @@ export default {
       a = a.rows[this.sortIndex].value?.toLowerCase();
       b = b.rows[this.sortIndex].value?.toLowerCase();
       return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
-    },
-    formatClocks: function (clocks) {
-      const clock = clocks?.find((_) =>
-        this.isSameDay(new Date(_.start), this.selectedDate)
-      );
-      console.log(clock);
-      return 2;
-    },
-    isSameDay: (d1, d2) =>
-      this.checkDate(d1, d2, "getFullYear") &&
-      this.checkDate(d1, d2, "getMonth") &&
-      this.checkDate(d1, d2, "getDate"),
-    checkDate: (d1, d2, method) => d1[method]() === d2[method](),
+    }
   },
 };
 </script>

@@ -166,8 +166,6 @@ export default {
     vacation: function(formData){
         this.startVacation=formData.startVacation
         this.endVacation=formData.endVacation
-        console.log(this.startVacation)
-        console.log(this.endVacation)
         this.isDisplayVacation=false
         this.isDisplayVacation2=true
     }

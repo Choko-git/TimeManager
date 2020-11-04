@@ -21,6 +21,7 @@
       :formSubmitMethod="formSubmitMethod"
       :formValidMethod="formValidMethod"
       :formSubmitButtonName="formSubmitButtonName"
+      :dataToSend = "dataToSend"
       @close-dropdown="closeDropDown"
     />
   </div>
@@ -51,7 +52,8 @@ export default {
     "formSubmitButtonName",
     "formSubmitMethod",
     "formValidMethod",
-    "noDataText"
+    "noDataText",
+    "dataToSend"
   ],
   mounted() {
     if (this.dropDownEvent === "click") {

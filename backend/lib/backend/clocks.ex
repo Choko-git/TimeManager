@@ -35,7 +35,7 @@ defmodule Backend.Clocks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_clock!(id), do: Repo.get!(Clock, id)
+  def get_clock(id), do: Repo.get(Clock, id)
 
   @doc """
   Creates a clock.
@@ -118,4 +118,3 @@ defmodule Backend.Clocks do
     |> Repo.one()
   end
 end
-

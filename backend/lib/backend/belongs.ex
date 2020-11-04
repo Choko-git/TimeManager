@@ -37,7 +37,12 @@ defmodule Backend.Belongs do
       ** (Ecto.NoResultsError)
 
   """
-  def get_belong!(id), do: Repo.get!(Belong, id)
+  def get_belong!(belong_params) do
+    Belong
+    |> where(team_id: ^belong_params["team_id"])
+    |> where(user_id: ^belong_params["user_id"])
+    |> Repo.one
+  end
 
   @doc """
   Creates a belong.
@@ -99,8 +104,11 @@ defmodule Backend.Belongs do
     |> Repo.delete_all()
   end
 
-  def delete_belong(%Belong{} = belong) do
-    Repo.delete(belong)
+  def delete_belong(belong_params) do
+    Belong
+    |> where(team_id: ^belong_params["team_id"])
+    |> where(user_id: ^belong_params["user_id"])
+    |> Repo.delete_all
   end
 
   @doc """
@@ -115,6 +123,8 @@ defmodule Backend.Belongs do
   def change_belong(%Belong{} = belong, attrs \\ %{}) do
     Belong.changeset(belong, attrs)
   end
+
+
 
   def get_info(params) do
     startDate =

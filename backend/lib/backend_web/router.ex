@@ -31,7 +31,7 @@ defmodule BackendWeb.Router do
 
     # Routes pour Clocks
     # get "/clocks/:userID", ClockController, :show
-    post "/clocks", ClockController, :create
+    post "/clocks", ClockController, :update_or_create
     get "/clocks/:userID", ClockController, :get_all
     put "/clocks/:id", ClockController, :update
     get "/clocks/:userID/:clockID", ClockController, :get_one
@@ -41,7 +41,7 @@ defmodule BackendWeb.Router do
     get "/teams/:teams_id", TeamController, :get_team_users
     post "/teams", TeamController, :create
     delete "/teams/:teamID", TeamController, :delete
-    put "/teams", TeamController, :update
+    put "/teams/:id", TeamController, :update
     get "/teams", TeamController, :get_all_teams
 
     # Routes pour Vacations
@@ -54,8 +54,8 @@ defmodule BackendWeb.Router do
 
     # Routes pour belongs // Utilisateurs -> Team
     get "/belongs", BelongController, :index
-    post "/belongs/:team_id/:user_id", BelongController, :create
-    delete "/belongs/:id", BelongController, :delete
+    post "/belongs/:team_id", BelongController, :create
+    delete "/belongs/:user_id/:team_id", BelongController, :delete
   end
 
   # Enables LiveDashboard only for development

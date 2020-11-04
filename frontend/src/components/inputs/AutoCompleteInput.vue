@@ -82,7 +82,7 @@ export default {
     "keyToShow",
     "dropDown",
     "array",
-    "disabled"
+    "disabled",
   ],
   methods: {
     focusOut: function () {
@@ -137,7 +137,9 @@ export default {
       setTimeout(() => (this.isFocus = false), 100);
     },
     deleteData(data) {
-      this.field.deleteMethod(data);
+      this.field.deleteMethod(data, this.field);
+      this.$forceUpdate();
+      this.$emit("dataDeleted", data);
     },
     clickOnDropDown() {
       this.dropDownClicked = true;

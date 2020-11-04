@@ -17,7 +17,7 @@
               name: 'surpervisor_id',
               placeholder: 'Choose a manager',
               type: 'autoComplete',
-              noDataText: 'No user found',
+              noDataText: 'No employee found',
               dataToSelect: [],
               searchData: searchManager,
               notHere: role !== 'admin',
@@ -27,19 +27,22 @@
               name: 'user_ids',
               placeholder: 'Choose employees',
               type: 'autoComplete',
-              noDataText: 'No user found',
+              noDataText: 'No employee found',
               dataToSelect: [],
               array: true,
               searchData: searchEmployee,
-              disabled: role === 'admin' && !selectedManager.id,
-              listValue: selectedEmployees,
+              disabled: true,
+              disabledMethods: (data) =>
+                this.role === 'admin' && !this.selectedManager,
+              listValue: [],
               listKey: 'username',
               change: employeeSelected,
               deleteMethod: employeeDeleted,
+              checkFieldMethod: (value, field) => field.listValue.length > 0,
             },
           ]"
           dropDownFormHttpMethod="post"
-          dropDownFormApiRoute="/users"
+          dropDownFormApiRoute="/teams"
           dropDownWidth="300px"
           :dropDownHeight="role === 'admin' ? '350px' : '280px'"
           :formSubmitMethod="beforeCreated"
@@ -47,14 +50,14 @@
         />
       </div>
 
-      <!-- <div id="search-field">
+      <div id="search-field">
         <AutoCompleteInput
-          placeholder="Search an employee ..."
-          keyToShow="username"
+          placeholder="Search a team ..."
+          keyToShow="name"
           @searchData="addRegExp($event)"
           @dataSelected="changeUser($event)"
         />
-      </div> -->
+      </div>
       <div v-if="teamsData" id="teams-list">
         <ListClassic
           :data="teamsData"
@@ -79,21 +82,24 @@
 import ListClassic from "@/components/list/ListClassic";
 import { mapState } from "vuex";
 import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
+import store from "@/store";
+import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 
 export default {
   data: () => ({
     teamsData: [],
     managersData: [],
     listColumns: null,
-    sortIndex: 1,
+    sortIndex: 0,
     sortOrder: 1,
     regExp: null,
-    selectedManager: {},
+    selectedManager: null,
     selectedEmployees: [],
   }),
   components: {
     ListClassic,
     SetButtonDropDown,
+    AutoCompleteInput,
   },
   created: function () {
     this.setColumns();
@@ -110,20 +116,21 @@ export default {
     },
   },
   methods: {
-    managerSelected(field) {
+    managerSelected(field, fields) {
       this.selectedEmployees.length = 0;
-      this.selectedManager.id = field.value;
-      console.log(this.selectedManager);
-      // this.$forceUpdate();
+      this.selectedManager = field.value;
+      fields[2].listValue.length = 0;
     },
     employeeSelected(field) {
       this.selectedEmployees.push(
         this.employeesData.find((_) => _.id === field.value)
       );
+      field.listValue = [...this.selectedEmployees];
     },
-    employeeDeleted(data){
-      const index = this.selectedEmployees.findIndex( _ => _ === data);
+    employeeDeleted(data, field) {
+      const index = this.selectedEmployees.findIndex((_) => _ === data);
       this.selectedEmployees.splice(index, 1);
+      field.listValue = [...this.selectedEmployees];
     },
     setEmployeesData(data) {
       if (this.role === "admin") {
@@ -137,23 +144,41 @@ export default {
       }
     },
     teamCreated(data) {
-      console.log(data);
-      // const user = data.data;
-      // const me = this.$store.state.data;
-      // if (user.surpervisor_id === me.id) {
-      //   me.employees.push(user);
-      // } else {
-      //   me.employees = me.employees.data((manager) => {
-      //     if (manager.id === user.id) {
-      //       manager.employees.push(user);
-      //     }
-      //   });
-      // }
-      // store.dispatch("changeData", me);
-      // this.initData();
+      const team = data.data;
+      const me = this.$store.state.data;
+      if (this.role === "admin") {
+        const manager = me.employees.find((_) => _.id === this.selectedManager);
+        manager.employees = this.addTeamInEmployees(manager.employees, team);
+      } else {
+        me.employees = this.addTeamInEmployees(me.employees, team);
+      }
+      store.dispatch("changeData", me);
+      this.setTeamsData(me);
+    },
+    addTeamInEmployees(array, team) {
+      return array.map((employee) => {
+        if (team.users.map((u) => u.id).includes(employee.id)) {
+          employee.teams.push(team);
+        }
+        return employee;
+      });
     },
     beforeCreated(data) {
-      console.log(data);
+      data.user_ids = this.selectedEmployees.map((_) => _.id);
+      return data;
+    },
+    addRegExp: function (value) {
+      this.regExp = this.createRegExp(value);
+      this.setTeamsData(this.$store.state.data);
+    },
+    sortEvent: function (column) {
+      if (this.sortIndex === column.sortIndex) {
+        this.sortOrder = this.sortOrder * -1;
+      } else {
+        this.sortOrder = 1;
+        this.sortIndex = column.sortIndex;
+      }
+      this.setTeamsData(this.$store.state.data);
     },
     createRegExp(value) {
       return new RegExp(
@@ -162,21 +187,19 @@ export default {
     },
     filterWithRegexp(regExp, array, condition = () => true) {
       return array
-        .filter((_) => {
+        ?.filter((_) => {
           return condition(_) && regExp.test(_.username.toLowerCase());
         })
         .splice(0, 10);
     },
     searchEmployee(value) {
-      const condition = this.role !== 'admin'
+      const condition = this.role !== "admin";
       if (value) {
         const regExp = this.createRegExp(value);
         return this.filterWithRegexp(regExp, this.employeesData, (data) => {
-          console.log(data);
-          console.log(condition);
           return (
-            this.selectedEmployees.findIndex((_) => _ === data) === -1 && 
-            (condition || data["surpervisor_id"] === this.selectedManager.id)
+            this.selectedEmployees.findIndex((_) => _ === data) === -1 &&
+            (condition || data["surpervisor_id"] === this.selectedManager)
           );
         });
       } else return [];
@@ -188,7 +211,12 @@ export default {
       } else return [];
     },
     goToTeamPage(data) {
-      console.log(data);
+      const selectedObject = { id: data.id, name: data.rows[0].value };
+      if (this.role === "admin") {
+        selectedObject.manager_id = data.rows[2].id;
+      }
+      localStorage.setItem("team", JSON.stringify(selectedObject));
+      this.$router.replace({ name: "Team" });
     },
     setColumns() {
       const defaultWidth = "200px";
@@ -213,9 +241,18 @@ export default {
       }
     },
     setTeamsData(data) {
+      this.teamsData.length = 0;
       this.role === "admin"
         ? this.setTeamsByManager(data)
         : this.setTeams(data);
+      if (this.regExp) {
+        this.teamsData = this.teamsData.filter((_) => {
+          return this.regExp.test(_.rows[0].value);
+        });
+      }
+      this.teamsData = this.teamsData.sort((a, b) => {
+        return this.sortList(a, b);
+      });
     },
     setTeamsByManager(data) {
       this.teamsData.length = 0;
@@ -230,17 +267,26 @@ export default {
         this.checkEmployeeTeams(employee);
       });
     },
+    sortList: function (a, b) {
+      a = a.rows[this.sortIndex].value;
+      b = b.rows[this.sortIndex].value;
+      if (!Number.isInteger(a)) {
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+      }
+      return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
+    },
     checkEmployeeTeams(employee, manager) {
       employee.teams?.forEach((team) => {
-        const teamData = this.teamsData.find((_) => _.id === team.id);
-        if (teamData) {
-          teamData.rows[2].value++;
+        const indexTeam = this.teamsData.findIndex((_) => _.id === team.id);
+        if (indexTeam !== -1) {
+          this.teamsData[indexTeam].rows[1].value++;
         } else {
           const rows = [{ value: team.name }, { value: 1 }];
           if (manager) {
-            rows.push({ value: manager.username });
+            rows.push({ value: manager.username, id: manager.id });
           }
-          teamData.push({
+          this.teamsData.push({
             id: team.id,
             rows,
           });

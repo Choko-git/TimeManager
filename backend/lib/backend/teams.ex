@@ -39,7 +39,7 @@ defmodule Backend.Teams do
     Team
     |> where([id: ^id])
     |> preload([:users])
-    |> Repo.all
+    |> Repo.one
    end
 
    def get_team_before_delete!(id) do

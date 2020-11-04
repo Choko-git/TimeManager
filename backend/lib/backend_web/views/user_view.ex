@@ -16,7 +16,11 @@ defmodule BackendWeb.UserView do
       email: user.email,
       role: user.role,
       right_active: user.right_active,
-      surpervisor_id: user.surpervisor_id
+      surpervisor_id: user.surpervisor_id,
+      teams: render_many(user.teams, BackendWeb.TeamView, "show_create.json"),
+      vacations: render_many(user.vacations, BackendWeb.VacationView, "vacation_bis.json"),
+      workingtimes: render_many(user.workingtimes, BackendWeb.WorkingtimeView, "workingtime_bis.json"),
+      clocks: render_many(user.clocks, BackendWeb.ClockView, "clock.json")
       }
   end
 

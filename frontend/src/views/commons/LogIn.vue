@@ -9,7 +9,8 @@
         apiRoute="/users/log_in"
         :fields="[
           { name: 'email', placeholder: 'Email', type: 'email' },
-          { name: 'password', placeholder: 'Password', type: 'password' }        ]"
+          { name: 'password', placeholder: 'Password', type: 'password' }
+        ]"
       />
     </div>
   </div>

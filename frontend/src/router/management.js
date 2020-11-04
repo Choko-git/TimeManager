@@ -15,9 +15,9 @@ const routes = [
         component: Dashboard
     },
     {
-        path: '/management/employees/:id',
+        path: '/management/employee/one',
         name: 'Employee',
-        component: Employee
+        component: Employee 
     },
     {
         path: '/management/employees',
@@ -25,7 +25,7 @@ const routes = [
         component: Employees
     },
     {
-        path: '/management/team',
+        path: '/management/teams/one',
         name: 'Team',
         component: Team
     },

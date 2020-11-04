@@ -18,7 +18,7 @@
             >
               {{ column.name }}
               <span
-                v-if="column.sortIndex"
+                v-if="column.sortIndex !== null && column.sortIndex"
                 :class="{ sortActive: column.sortActive }"
                 @click="sort(column)"
                 >▼</span
@@ -33,7 +33,7 @@
             v-for="element of dataToShow"
             class="table-row"
             :class="{ lineLink: lastColumnButton.allLine }"
-            @click="clickOnRow(element.id)"
+            @click="clickOnRow(element)"
           >
             <td
               v-for="column of element.rows"
@@ -46,7 +46,18 @@
               <div class="arrow"></div>
             </td>
             <td v-if="lastColumnButton.type === 'button'" class="list-button">
-              <div class=""></div>
+              <div class="button-settings">
+                <SetButtonDropDown
+                  buttonType="ButtonRoll"
+                  buttonIcon="settings"
+                  buttonName="Settings"
+                  dropDownType="DropDownList"
+                  :dropDownData="lastColumnButton.links"
+                  :dataToSend="element"
+                  dropDownWidth="180px"
+                  :dropDownMouseEvent="true"
+                />
+              </div>
             </td>
           </tr>
         </tbody>
@@ -62,6 +73,7 @@
 
 <script>
 import Pager from "./Pager";
+import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
 
 export default {
   data: () => ({
@@ -80,6 +92,7 @@ export default {
   },
   components: {
     Pager,
+    SetButtonDropDown,
   },
   watch: {
     data: function () {
@@ -87,9 +100,9 @@ export default {
     },
   },
   methods: {
-    clickOnRow(row){
-      if(this.lastColumnButton.allLine){
-        console.log(row);
+    clickOnRow(row) {
+      if (this.lastColumnButton.allLine) {
+        this.lastColumnButton.method(row);
       }
     },
     setDataToShow() {
@@ -197,9 +210,9 @@ export default {
               cursor: pointer;
               & .arrow {
                 @include arrow;
-              }
-              &:hover {
-                opacity: 0.4;
+                &:hover {
+                  opacity: 0.4;
+                }
               }
             }
           }

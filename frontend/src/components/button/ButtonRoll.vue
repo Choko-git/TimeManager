@@ -5,6 +5,7 @@
     @mouseover="onMouseEvent(true)"
     @mouseleave="onMouseEvent(false)"
     :button-name="name"
+    
   >
     <div class="img-container">
       <img :src="require(`@/assets/icons/${icon}.svg`)" alt="" />

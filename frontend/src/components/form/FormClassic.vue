@@ -28,6 +28,7 @@
           :noDataText="field.noDataText"
           @searchData="searchData($event, field)"
           @dataSelected="selectData($event, field)"
+          @dataDeleted="dataDeleted"
         />
       </div>
     </div>
@@ -71,7 +72,6 @@ export default {
     AutoCompleteInput,
   },
   created: function () {
-    console.log('ojojojojoojo');
     this.fields.forEach((_) => {
       _.required = _.required === false ? false : true;
       _.checkFieldMethod =
@@ -87,10 +87,10 @@ export default {
     },
     selectData(event, field) {
       field.value = event.id;
-      if(field.change){
-        field.change(field);
+      if (field.change) {
+        field.change(field, this.fields);
       }
-      this.checkRequiredFields();
+      this.fieldChange();
     },
     getCheckFieldFromType(type) {
       switch (type) {
@@ -102,26 +102,36 @@ export default {
           return null;
       }
     },
+    dataDeleted(){
+      this.checkRequiredFields()
+    },
     fieldChange() {
       this.fields.forEach((field) => {
-        console.log(field);
         if (field.if) {
           field.display = field.if(this.fields);
-          console.log(field);
+        }
+        if (field.disabledMethods) {
+          field.disabled = field.disabledMethods();
         }
       });
       this.checkRequiredFields();
+      this.$forceUpdate();
     },
     checkRequiredFields() {
       this.buttonDisabled =
         this.fields.filter((field) => {
           let value = field.value;
           if (value && field.checkFieldMethod) {
-            value = field.checkFieldMethod(value);
+            value = field.checkFieldMethod(value, field);
           }
           const fieldNotDisplay = field.if && !field.display;
-          const check = !value && field.required !== false && !fieldNotDisplay && !field.notHere;
+          const check =
+            !value &&
+            field.required !== false &&
+            !fieldNotDisplay &&
+            !field.notHere;
           field.redBorder = check && value !== undefined && value !== "";
+  
           return check;
         }).length > 0;
     },

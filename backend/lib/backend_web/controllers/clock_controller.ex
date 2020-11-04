@@ -15,18 +15,31 @@ defmodule BackendWeb.ClockController do
     with {:ok, %Clock{} = clock} <- Clocks.create_clock(clock_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
       |> render("show.json", clock: clock)
     end
   end
 
+  def update_or_create(conn, clock_params) do
+    clock = if(clock_params["id"]) do
+      Clocks.get_clock(clock_params["id"])
+    else
+      nil
+    end
+
+    if clock do
+      update(conn, clock_params)
+    else
+      create(conn, clock_params)
+    end
+  end
+
   def show(conn, id) do
-    clock = Clocks.get_clock!(id)
+    clock = Clocks.get_clock(id)
     render(conn, "show.json", clock: clock)
   end
 
   def update(conn, clock_params) do
-    clock = Clocks.get_clock!(clock_params["id"])
+    clock = Clocks.get_clock(clock_params["id"])
 
     with {:ok, %Clock{} = clock} <- Clocks.update_clock(clock, clock_params) do
       render(conn, "show.json", clock: clock)
@@ -41,12 +54,12 @@ defmodule BackendWeb.ClockController do
     end
   end
 
-  def get_one(conn,params) do
+  def get_one(conn, params) do
     clock = Clocks.get_clock_one(params)
     render(conn, "show.json", clock: clock)
   end
 
-  def get_all(conn,params) do
+  def get_all(conn, params) do
     clocks = Clocks.get_clocks(params)
     render(conn, "index.json", clocks: clocks)
   end

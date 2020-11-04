@@ -10,6 +10,7 @@
       <li
         v-for="element of data"
         :key="element.name"
+        :class="{redAlert: element.delete}"
         @click.stop="clickOnElement(element)"
         :style="[
           element.icon
@@ -27,7 +28,7 @@
 
 <script>
 export default {
-  props: ["active", "data", "width", "mouseEvent"],
+  props: ["active", "data", "width", "mouseEvent","dataToSend"],
   methods: {
     activeDropDown: function (value) {
       if (this.mouseEvent) {
@@ -36,7 +37,7 @@ export default {
     },
     clickOnElement(element) {
       if (element.method) {
-        element.method();
+        element.method(this.dataToSend);
       }
     },
   },
@@ -45,6 +46,10 @@ export default {
 
 <style lang="scss">
 .list-dropdown {
-  @include listDropDown
+  @include listDropDown;
+  z-index: 5;
+  & .redAlert{
+    background-color: $error-bgc;
+  }
 }
 </style>

@@ -11,10 +11,18 @@ defmodule BackendWeb.BelongController do
     render(conn, "index.json", belongs: belongs)
   end
 
-  def create(conn, belong_params) do
+  def create_mult(conn, belong_params) do
     Enum.each(belong_params.user_ids, fn user_id ->
       Belongs.create_belong(%{team_id: belong_params.team_id, user_id: user_id})
     end)
+  end
+
+  def create(conn, belong_params) do
+    IO.inspect(belong_params)
+
+    with {:ok, %Belong{} = belong} <- Belongs.create_belong(belong_params) do
+      render(conn, "show.json", belong: belong)
+    end
   end
 
   def show(conn, %{"id" => id}) do
@@ -30,11 +38,9 @@ defmodule BackendWeb.BelongController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    belong = Belongs.get_belong!(id)
-    with {:ok, %Belong{}} <- Belongs.delete_belong(belong) do
-      send_resp(conn, :no_content, "")
-    end
+  def delete(conn, params) do
+    Belongs.delete_belong(params)
+    send_resp(conn, :no_content, "")
   end
 
   def get_belong_info(conn, params) do
