@@ -1,6 +1,6 @@
 module.exports = {
-  //outputDir: '../timemanager_mobile/www',
-  //publicPath: '',
+  outputDir: '../timemanager_mobile/www',
+  publicPath: '',
   
   configureWebpack: {
     plugins: [
@@ -14,10 +14,10 @@ module.exports = {
           additionalData : `@import "@/assets/styles/main.scss";`
       }
     }
-  }
+  },
 
-  //publicPath: '',
-  //pluginOptions: {
-   // cordovaPath: '../timemanager_mobile'
- // }
+  publicPath: '',
+  pluginOptions: {
+    cordovaPath: '../timemanager_mobile'
+  }
 };
