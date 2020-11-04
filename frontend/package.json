@@ -16,6 +16,8 @@
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.4",
     "vue": "^2.6.11",
+    "vue-easytable": "^1.7.2",
+    "vue-js-grid": "^1.0.1",
     "vue-morris": "^1.1.0",
     "vue-router": "^3.2.0",
     "vuex": "^3.5.1"
@@ -33,7 +35,7 @@
     "portal-vue": "^2.1.7",
     "sass": "^1.26.11",
     "vue-cli-plugin-bootstrap-vue": "~0.7.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11 "
   },
   "eslintConfig": {
     "root": true,

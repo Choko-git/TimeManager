@@ -16,7 +16,7 @@
             { name: 'email', placeholder: 'Email', type: 'email' },
             { name: 'password', placeholder: 'Password', type: 'text' },
             {
-              notHere:  this.role !== 'admin',
+              notHere: this.role !== 'admin',
               name: 'role',
               placeholder: 'Role',
               type: 'select',
@@ -33,7 +33,7 @@
               ],
             },
             {
-                  notHere:  this.role !== 'admin',
+              notHere: this.role !== 'admin',
               name: 'surpervisor_id',
               placeholder: 'Choose a manager',
               type: 'autoComplete',
@@ -49,7 +49,6 @@
           :dropDownHeight="role === 'admin' ? '410px' : '280px'"
           :formSubmitMethod="beforeCreated"
           :formValidMethod="employeeCreated"
-
         />
       </div>
 
@@ -137,7 +136,9 @@ export default {
       this.initData();
     },
     goToEmployeePage(employee) {
-      console.log(employee);
+      const selectedObject = { id: employee.id };
+      localStorage.setItem("employee", JSON.stringify(selectedObject));
+      this.$router.replace({ name: "Employee" });
     },
     beforeCreated(data) {
       if (data.role === "manager") {
@@ -250,7 +251,7 @@ export default {
       a = a.rows[this.sortIndex].value?.toLowerCase();
       b = b.rows[this.sortIndex].value?.toLowerCase();
       return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
-    }
+    },
   },
 };
 </script>

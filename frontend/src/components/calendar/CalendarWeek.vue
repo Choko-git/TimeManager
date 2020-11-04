@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div id="workingtimes_array">
     <div v-if="this.position == 0">
       <h2>Calendar for actual week. </h2>
