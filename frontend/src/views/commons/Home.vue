@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <div id="component-button">
-        <ButtonClassic v-on:send="clock" :name="text" />
+        <ButtonClassic v-on:mouse-event="clock" :name="text" />
 
         <div v-if="isDisplayFormulaireClock">
             <FormClassic
@@ -26,14 +26,14 @@
         </div>
 
         <h2> Home </h2>
-        <ButtonClassic v-on:send="show" name="Vacation Request" />
+        <ButtonClassic v-on:mouse-event="show" name="Vacation Request" />
 
         <div v-if="isDisplayVacation">
             <FormClassic
-            submitButtonName="Submit"
+            submitButtonName="submit"
             :formSubmitMethod="vacation"
             httpMethod="post"
-            apiRoute="/vacation"
+            apiRoute="/vacations"
             :fields="[
             { name: 'startVacation', label: 'Start', type: 'date' },
             { name: 'endVacation', label: 'End', type: 'date' },
@@ -41,9 +41,10 @@
             />
         </div>
         <div v-if="isDisplayVacation2">
-            <p>Wait until your manager give a reponse for your vacation from {{startVacation}} to {{endVacation}} </p>
+            <p>wait until your manager give you a response, vacation : {{startVacation}} to {{endVacation}} </p>
         </div>
     </div>
+    <CalendarWeek/>
   </div>
 </template>
 
@@ -52,6 +53,8 @@
 <script>
 import ButtonClassic from  "../../components/button/ButtonClassic";
 import FormClassic from  "../../components/form/FormClassic";
+import CalendarWeek from "@/components/calendar/CalendarWeek";
+
 
 export default {
     data: function(){
@@ -79,8 +82,8 @@ export default {
   components : {
     ButtonClassic,
     FormClassic,
+    CalendarWeek
   },
-
   methods : {
 
     reset: function(formData){
@@ -90,8 +93,17 @@ export default {
         this.dateDeb=null
         this.text="Clock In"
         this.breaktime=formData.breaktime
+        var word = this.breaktime.split(":")
+        if ((this.minutesFin - this.minutesDeb - word[1])<10){
+                this.totalWork = (this.heuresFin - this.heuresDeb - word[0]) + "h" + "0" + (this.minutesFin - this.minutesDeb - word[1])
+            }
+        else {
+                this.totalWork = (this.heuresFin - this.heuresDeb - word[0]) + "h" + (this.minutesFin - this.minutesDeb - word[1]) 
+        }
+        if ((this.heuresFin - this.heuresDeb - word[0])<10){
+            this.totalWork = "0" + this.totalWork
+        }
         return {
-            user_id: this.user.id,
             start: this.startHour,
             total_time: this.totalWork,
             end: this.endHour,
@@ -116,16 +128,6 @@ export default {
             if (this.heuresFin < 10){
                 this.endHour = "0" + this.endHour
                 }
-
-            if ((this.minutesFin - this.minutesDeb)<10){
-                this.totalWork = (this.heuresFin - this.heuresDeb) + "h" + "0" + (this.minutesFin - this.minutesDeb)
-            }
-            else {
-                this.totalWork = (this.heuresFin - this.heuresDeb) + "h" + (this.minutesFin - this.minutesDeb) 
-            }
-            if ((this.heuresFin - this.heuresDeb)<10){
-            this.totalWork = "0" + this.totalWork
-            }
           }
           else if (this.text=="Back to Work") {
             this.isDisplayFormulaireClock=true 
@@ -166,8 +168,14 @@ export default {
     vacation: function(formData){
         this.startVacation=formData.startVacation
         this.endVacation=formData.endVacation
+        console.log(this.startVacation)
+        console.log(this.endVacation)
         this.isDisplayVacation=false
         this.isDisplayVacation2=true
+        return {
+            start: this.startVacation,
+            end: this.endVacation
+        }
     }
   }
   
@@ -188,6 +196,7 @@ export default {
     }
   }
 </style>
+
 
 
 

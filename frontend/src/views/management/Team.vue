@@ -388,18 +388,18 @@ export default {
 
 
 <style lang="scss">
-#teams {
-  @include page;
-  & .content {
-    position: relative;
-    & #clock-popup {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      z-index: 50;
-      & .form-dropdown {
-        top: 20%;
-        left: 50%;
+  #teams {
+    @include page;
+    & .content {
+      position: relative;
+      & #clock-popup {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: 50;
+        & .form-dropdown {
+          top: 20%;
+          left: 50%;
         transform: translateX(-50%);
       }
     }
