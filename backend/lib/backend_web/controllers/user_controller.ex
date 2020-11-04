@@ -17,10 +17,12 @@ defmodule BackendWeb.UserController do
 
     user_params =
       if !user_params["surpervisor_id"] do
-        Map.replace(user_params, "surpervisor_id", conn.assigns.current_user["user_id"])
+        Map.delete(user_params, "surpervisor_id")
+        Map.put(user_params, "surpervisor_id", conn.assigns.current_user["user_id"])
       else
         user_params
       end
+
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -71,9 +73,9 @@ defmodule BackendWeb.UserController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-
+  def delete(conn, params) do
+    user = Users.get_user!(params["id"])
+    Backend.Belongs.delete_by_user(params)
     with {:ok, %User{}} <- Users.delete_user(user) do
       send_resp(conn, :no_content, "")
     end
@@ -86,7 +88,13 @@ defmodule BackendWeb.UserController do
 
   def get_all_users(conn, params) do
     userId = conn.assigns.current_user["user_id"]
-    user = Users.get_users_of_supervisor!(userId)
+    users = Users.get_users_of_supervisor!(userId)
+    render(conn, "index.json", users: users)
+  end
+
+  def get_me(conn, params) do
+    userId = conn.assigns.current_user["user_id"]
+    user = Users.get_me(userId)
     render(conn, "show.json", user: user)
   end
 

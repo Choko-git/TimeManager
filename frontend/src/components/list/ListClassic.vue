@@ -66,7 +66,7 @@ import Pager from "./Pager";
 export default {
   data: () => ({
     totalPages: null,
-    totalPerPage: 10,
+    totalPerPage: 7,
     page: 1,
     dataToShow: null,
     noData: true,

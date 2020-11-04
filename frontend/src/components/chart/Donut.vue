@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <div>
     <donut-chart
       id="donut"

@@ -13,16 +13,15 @@ defmodule BackendWeb.TeamController do
   end
 
   def create(conn,team_params) do
-    with {:ok, %Team{} = team} <- Teams.create_team(team_params)do    
-      conn
-      |> put_status(:created)
-      |> render("show_create.json", team: team)
+    with {:ok, %Team{} = team} <- Teams.create_team(team_params)do
+    BackendWeb.BelongController.create(conn, %{team_id: team.id, user_ids: team_params["user_ids"]})
+    show(conn, %{"teamID" => team.id})
     end
   end
 
   def show(conn, %{"teamID" => id}) do
-    team = Teams.get_team!(id)
-    render(conn, "show.json", team: team)
+    teams = Teams.get_team!(id)
+    render(conn, "teams.json", teams: teams)
   end
 
   def update(conn, team_params) do
@@ -32,8 +31,8 @@ defmodule BackendWeb.TeamController do
     end
   end
 
-  def delete(conn, %{"teamID" => id}) do
-    team = Teams.get_team!(id)
+  def delete(conn, params) do
+    team = Teams.get_team_before_delete!(params["teamID"])
 
     with {:ok, %Team{}} <- Teams.delete_team(team) do
       send_resp(conn, :no_content, "")

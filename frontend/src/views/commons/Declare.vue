@@ -52,7 +52,6 @@ export default {
   created: async function() {
     this.allData = this.$store.state.data;
     var check = 0;
-
     for (var i = 0; i < this.allData.workingtimes.length; i++) {
       for (var j = 0; j < this.allData.clocks.length; j++) {
         if (new Date(this.allData.workingtimes[i].start).getDate()
@@ -101,7 +100,6 @@ export default {
       var _end = new Date(reference.setHours(formData.end.split(':')[0], formData.end.split(':')[1]))
       var _total_time = new Date(_end).getTime() - new Date(_start).getTime()
       _total_time -= (+(formData.break_time.split(":"))[0] * (60000 * 60))
-      console.log(_start, _total_time, _end)
       return {
         user_id: this.user.id,
         start: _start,

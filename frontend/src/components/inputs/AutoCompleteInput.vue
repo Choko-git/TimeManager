@@ -1,5 +1,16 @@
 <template>
   <div class="autocomplete-field">
+    <div v-if="array" class="selected-list">
+      <ul>
+        <li
+          v-for="element of field.listValue"
+          :key="element[field.listKey]"
+          @click="deleteData(element)"
+        >
+          {{ element[field.listKey] }} <span>✗</span>
+        </li>
+      </ul>
+    </div>
     <input
       :ref="placeholder"
       v-bind:class="{
@@ -12,6 +23,7 @@
       @focus="isFocus = true"
       @blur="focusOut"
       :placeholder="placeholder"
+      :disabled="disabled"
     />
     <div
       v-if="isFocus && dropDown && inputTyped"
@@ -63,14 +75,22 @@ export default {
       dropDownClicked: false,
     };
   },
-  props: ["placeholder", "noDataText", "field", "keyToShow", "dropDown"],
+  props: [
+    "placeholder",
+    "noDataText",
+    "field",
+    "keyToShow",
+    "dropDown",
+    "array",
+    "disabled"
+  ],
   methods: {
     focusOut: function () {
       setTimeout(() => {
         if (this.dropDownClicked) {
           this.dropDownClicked = false;
         } else {
-          this.isFocus = true;
+          this.isFocus = false;
         }
       }, 300);
     },
@@ -107,11 +127,17 @@ export default {
     },
 
     onSelectData(data) {
-      console.log(2);
       this.dropDownClicked = true;
-      this.$refs[this.placeholder].value = data[this.keyToShow];
+      if (this.field.array) {
+        this.$refs[this.placeholder].value = null;
+      } else {
+        this.$refs[this.placeholder].value = data[this.keyToShow];
+      }
       this.$emit("dataSelected", data);
       setTimeout(() => (this.isFocus = false), 100);
+    },
+    deleteData(data) {
+      this.field.deleteMethod(data);
     },
     clickOnDropDown() {
       this.dropDownClicked = true;
@@ -122,6 +148,63 @@ export default {
 
 <style lang="scss">
 .autocomplete-field {
+  & .selected-list {
+    height: 60px;
+    margin: 0;
+    display: flex;
+    & ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 7px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      & li {
+        position: relative;
+        transition: all 0.4s;
+        height: 40px;
+        border-radius: 10px;
+        margin: 0;
+        margin-right: 10px;
+        padding: 8px 30px 8px 12px;
+        border: $grey-slight-border;
+        box-shadow: $button-shadow;
+        &:hover {
+          font-weight: normal !important;
+          border-color: $lighter-grey;
+          color: $mid-grey;
+          & span {
+            color: red;
+            opacity: 0.5;
+          }
+        }
+        & span {
+          color: black;
+          position: absolute;
+          top: 20%;
+          right: 8%;
+          margin: 0 !important;
+          font-weight: 600;
+          font-size: 14px;
+        }
+      }
+      &::-webkit-scrollbar {
+        position: absolute;
+        width: auto;
+        height: 7px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: inherit;
+        border-radius: 3px;
+        border-radius: 10px;
+        &:hover {
+          background: rgba(114, 111, 111, 0.158);
+        }
+      }
+    }
+  }
   & input {
     @include classic-input;
     margin-top: 0 !important;
@@ -168,7 +251,7 @@ export default {
         }
       }
       & .loader {
-        border : none;
+        border: none;
         display: flex;
         width: 20px;
         height: 20px;

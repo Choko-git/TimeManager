@@ -21,6 +21,7 @@
       :formSubmitMethod="formSubmitMethod"
       :formValidMethod="formValidMethod"
       :formSubmitButtonName="formSubmitButtonName"
+      @close-dropdown="closeDropDown"
     />
   </div>
 </template>
@@ -58,7 +59,7 @@ export default {
     }
   },
   computed: {
-    Button() {
+    Button() {  
       return () => import(`../../components/button/${this.buttonType}`);
     },
     DropDown() {
@@ -70,9 +71,9 @@ export default {
       this.dropDownActive = false;
     },
     activeDropDown: function (value = null) {
-      if (this.dropDownEvent === "click") {
-        this.dropDownActive = !this.dropDownActive;
-      } else {
+        if (this.dropDownEvent === "click") {
+          this.dropDownActive = !this.dropDownActive;
+        } else {
         this.mouseOnDropDown = value;
         if (value) this.dropDownActive = value;
         else {

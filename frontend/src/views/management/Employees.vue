@@ -16,6 +16,7 @@
             { name: 'email', placeholder: 'Email', type: 'email' },
             { name: 'password', placeholder: 'Password', type: 'text' },
             {
+              notHere:  this.role !== 'admin',
               name: 'role',
               placeholder: 'Role',
               type: 'select',
@@ -32,6 +33,7 @@
               ],
             },
             {
+                  notHere:  this.role !== 'admin',
               name: 'surpervisor_id',
               placeholder: 'Choose a manager',
               type: 'autoComplete',
@@ -44,9 +46,10 @@
           dropDownFormHttpMethod="post"
           dropDownFormApiRoute="/users"
           dropDownWidth="300px"
-          :dropDownHeight="role === 'admin' ? '410px' : '250px'"
+          :dropDownHeight="role === 'admin' ? '410px' : '280px'"
           :formSubmitMethod="beforeCreated"
-          :formValidMethod="() => {}"
+          :formValidMethod="employeeCreated"
+
         />
       </div>
 
@@ -83,6 +86,7 @@ import ListClassic from "@/components/list/ListClassic";
 import AutoCompleteInput from "@/components/inputs/AutoCompleteInput";
 import SetButtonDropDown from "@/components/sets/SetButtonDropDown";
 import { mapState } from "vuex";
+import store from "@/store";
 
 export default {
   data: () => ({
@@ -100,46 +104,63 @@ export default {
     SetButtonDropDown,
   },
   created: function () {
-    const allData = this.$store.state.data;
-    console.log(allData);
-    this.employeesData = [];
-    this.flattenEmployees(this.employeesData, allData);
-    this.setWholeTable();
+    this.initData();
   },
   computed: mapState({
     role: (state) => (state.auth.isAuth ? state.auth.user.role : null),
   }),
   watch: {
-    "$store.state.data": function (data) {
-      const allData = data;
-      this.employeesData = [];
-      this.flattenEmployees(this.employeesData, allData);
-      this.setWholeTable();
+    "$store.state.data": function () {
+      this.initData();
     },
   },
   methods: {
+    initData() {
+      const allEmployees = this.$store.state.data?.employees || [];
+      this.employeesData = [];
+      this.flattenEmployees(this.employeesData, allEmployees);
+      this.setWholeTable();
+    },
+    employeeCreated(data) {
+      const user = data.data;
+      const me = this.$store.state.data;
+      console.log(me);
+      console.log(data);
+      if (user.surpervisor_id === me.id) {
+        me.employees.push(user);
+      } else {
+        me.employees = me.employees.data((manager) => {
+          if (manager.id === user.id) {
+            manager.employees.push(user);
+          }
+        });
+      }
+      store.dispatch("changeData", me);
+      this.initData();
+    },
     goToEmployeePage(employee) {
       console.log(employee);
     },
     beforeCreated(data) {
+      console.log(data);
       if (data.role === "manager") {
-        data.surpervisor_id = null;
+        data.surpervisor_id = undefined;
       }
       return data;
     },
     searchManager: function (value) {
       if (value) {
         const regExp = new RegExp(
-          value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+          value?.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
         );
         return this.employeesData.filter((_) => {
-          return _.role === "manager" && regExp.test(_.username.toLowerCase());
+          return _.role === "manager" && regExp.test(_.username?.toLowerCase());
         });
       } else return [];
     },
     addRegExp: function (value) {
       this.regExp = new RegExp(
-        value.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
+        value?.toLowerCase().trim().replace(/\s+/g, "").split("").join(" *")
       );
       this.searchUsers();
     },
@@ -149,14 +170,13 @@ export default {
       this.employeesListData = this.employeesListData.sort((a, b) => {
         return this.sortList(a, b);
       });
-      console.log(this.employeesListData);
     },
     filterFlatData: function () {
       return this.employeesData.filter((_) => {
         return this.checkRegExp(_.username);
       });
     },
-    flattenEmployees: function (array, employees = this.employeesData) {
+    flattenEmployees: function (array, employees) {
       if (employees) {
         for (const employee of employees) {
           array.push({ ...employee, employees: null });
@@ -167,7 +187,7 @@ export default {
       }
     },
     checkRegExp: function (value) {
-      return this.regExp ? this.regExp?.test(value.toLowerCase()) : true;
+      return this.regExp ? this.regExp?.test(value?.toLowerCase()) : true;
     },
     selectUser: function () {},
     setWholeTable: function () {
@@ -199,16 +219,14 @@ export default {
       }
     },
     formatRow: function (employee) {
-      this.employeesListData.push(
-        {
-          id: employee.id,
-          rows: [
-            { class: "status status-present" },
-            { value: employee.username },
-            { value: this.formatRolesOrTeams(employee) },
-          ],
-        },
-      );
+      this.employeesListData.push({
+        id: employee.id,
+        rows: [
+          { class: "status status-present" },
+          { value: employee.username },
+          { value: this.formatRolesOrTeams(employee) },
+        ],
+      });
     },
     formatRolesOrTeams: function (employee) {
       if (this.role === "admin") {
@@ -223,7 +241,6 @@ export default {
       return "Alpha";
     },
     sortEvent: function (column) {
-      console.log(column);
       if (this.sortIndex === column.sortIndex) {
         this.sortOrder = this.sortOrder * -1;
       } else {
@@ -233,8 +250,8 @@ export default {
       this.searchUsers();
     },
     sortList: function (a, b) {
-      a = a.rows[this.sortIndex].value.toLowerCase();
-      b = b.rows[this.sortIndex].value.toLowerCase();
+      a = a.rows[this.sortIndex].value?.toLowerCase();
+      b = b.rows[this.sortIndex].value?.toLowerCase();
       return a > b ? 1 * this.sortOrder : a < b ? -1 * this.sortOrder : 0;
     },
     formatClocks: function (clocks) {

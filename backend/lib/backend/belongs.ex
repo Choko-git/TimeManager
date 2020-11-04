@@ -87,6 +87,18 @@ defmodule Backend.Belongs do
       {:error, %Ecto.Changeset{}}
 
   """
+  def delete_by_user(belong_params) do
+    Belong
+    |> where(user_id: ^belong_params["user_id"])
+    |> Repo.delete_all()
+  end
+
+  def delete_by_team(belong_params) do
+    Belong
+    |> where(team_id: ^belong_params["teamID"])
+    |> Repo.delete_all()
+  end
+
   def delete_belong(%Belong{} = belong) do
     Repo.delete(belong)
   end
@@ -105,26 +117,25 @@ defmodule Backend.Belongs do
   end
 
   def get_info(params) do
-
     startDate =
       if params["user_id"] do
         from(belong in Belong,
-        where:
-          belong.user_id == ^params["user_id"]
-      )
+          where: belong.user_id == ^params["user_id"]
+        )
       else
         true
       end
+
     endDate =
       if params["team_id"] do
         dynamic([belong], belong.team_id == ^params["team_id"])
       else
         true
       end
+
     Belong
     |> where(^startDate)
     |> where(^endDate)
     |> Repo.all()
   end
-
 end
