@@ -4,8 +4,9 @@ WORKDIR /frontend
 COPY . .
 RUN npm install
 RUN npm install -g vue-cli
-#RUN npm install -g cordova
-#RUN npm run build
+RUN npm install -g cordova
+RUN npm install --save module readline
+RUN npm run build
 
 #WORKDIR /timemanager_mobile
 #RUN cordova platform add android

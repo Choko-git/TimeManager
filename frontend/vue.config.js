@@ -1,6 +1,8 @@
+const webpack = require('webpack');
+
 module.exports = {
-  //outputDir: '../timemanager_mobile/www',
-  //publicPath: '',
+  outputDir: '../timemanager_mobile/www',
+  publicPath: './',
   
   configureWebpack: {
     plugins: [
@@ -15,9 +17,4 @@ module.exports = {
       }
     }
   }
-
-  //publicPath: '',
-  //pluginOptions: {
-   // cordovaPath: '../timemanager_mobile'
- // }
 };

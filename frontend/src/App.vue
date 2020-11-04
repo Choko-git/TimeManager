@@ -24,7 +24,7 @@ export default {
     Header,
     SideMenu,
     Template,
-  },
+  }
 };
 </script>
 
